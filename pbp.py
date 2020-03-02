@@ -31,15 +31,21 @@ def clean_text(pbp_url):
 
 
 
-def get_players(play_text):
+def get_players(play_str):
     '''
     Input:  The text of a play (str)
     Output: list of players involved in play
     Reference: https://stackoverflow.com/questions/9525993/get-consecutive-capitalized-words-using-regex
     '''
-    l = re.findall('([A-Z][\w-]*(?:\s+[A-Z][\w-]*)+)', play_text)
+    #pattern = "([A-Z][a-zA-Z.]+(?=/s[A-Z])(?:/s[A-Z][a-z]+)+)"
+    l = re.findall(r"([A-Z][a-zA-Z.]+(?=\s[A-Z])(?:\s[A-Z][a-z]+)+)", play_str)
     return l
 
+def get_big_player_list(text_list):
+    l = []
+    for play in text_list:
+        l.append(get_players(play))
+    return l
 
 def make_revised_play(play_text, players_list):
     for player in players_list:
