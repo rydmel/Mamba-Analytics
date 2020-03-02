@@ -37,8 +37,8 @@ def get_players(play_str):
     Output: list of players involved in play
     Reference: https://stackoverflow.com/questions/9525993/get-consecutive-capitalized-words-using-regex
     '''
-    #pattern = "([A-Z][a-zA-Z.]+(?=/s[A-Z])(?:/s[A-Z][a-z]+)+)"
-    l = re.findall(r"([A-Z][a-zA-Z.]+(?=\s[A-Z])(?:\s[A-Z][a-z]+)+)", play_str)
+    #might need to consider apostrophe for players with one in their name
+    l = re.findall(r"([A-Z][A-Za-z.-]+(?=\s[A-Z])(?:\s[A-Z][A-Za-z.-]+)+)", play_str)
     return l
 
 def get_big_player_list(text_list):
@@ -61,7 +61,7 @@ def make_new_text_list(play_text_list, player_list):
         shot_desc = re.findall(s, new_play)
         if shot_desc:
             new_play = new_play.replace(shot_desc[0], '')
-        action_list.append(new_play) 
+        action_list.append(new_play.lstrip()) 
     return action_list
 
 
@@ -70,4 +70,88 @@ def make_new_text_list(play_text_list, player_list):
 #game_url = 'https://www.espn.com/nba/playbyplay?gameId=401161524'
 
 
+action_set = {'Bucks defensive team rebound',
+ 'Bucks offensive team rebound',
+ 'End of Game',
+ 'End of the 1st Quarter',
+ 'End of the 2nd Quarter',
+ 'End of the 3rd Quarter',
+ 'End of the 4th Quarter',
+ 'Thunder defensive team rebound',
+ 'Thunder delay of game violation',
+ 'Thunder offensive team rebound',
+ 'bad pass ( steals)',
+ "blocks  's  driving layup",
+ "blocks  's  layup",
+ "blocks  's  three point jumper",
+ "blocks 's driving layup",
+ 'defensive rebound',
+ 'enters the game for',
+ 'enters the game for ',
+ 'kicked ball violation',
+ 'loose ball foul',
+ 'lost ball turnover ( steals)',
+ 'makes  driving floating jump shot',
+ 'makes  driving floating jump shot ( assists)',
+ 'makes  dunk ( assists)',
+ 'makes  hook shot ( assists)',
+ 'makes  jumper',
+ 'makes  jumper ( assists)',
+ 'makes  pullup jump shot',
+ 'makes  pullup jump shot ( assists)',
+ 'makes  step back jumpshot',
+ 'makes  step back jumpshot ( assists)',
+ 'makes  three point jumper',
+ 'makes  three point jumper ( assists)',
+ 'makes  two point shot',
+ 'makes  two point shot ( assists)',
+ 'makes driving dunk',
+ 'makes driving floating jump shot',
+ 'makes driving layup',
+ 'makes driving layup ( assists)',
+ 'makes dunk',
+ 'makes dunk ( assists)',
+ 'makes free throw 1 of 1',
+ 'makes free throw 1 of 2',
+ 'makes free throw 1 of 3',
+ 'makes free throw 2 of 2',
+ 'makes free throw 2 of 3',
+ 'makes hook shot',
+ 'makes layup ( assists)',
+ 'makes pullup jump shot',
+ 'makes technical free throw',
+ 'makes tip shot',
+ 'makes two point shot',
+ 'makes two point shot ( assists)',
+ 'misses  hook shot',
+ 'misses  jumper',
+ 'misses  pullup jump shot',
+ 'misses  step back jumpshot',
+ 'misses  three point jumper',
+ 'misses  two point shot',
+ 'misses alley oop layup',
+ 'misses driving layup',
+ 'misses free throw 1 of 1',
+ 'misses free throw 1 of 2',
+ 'misses free throw 2 of 2',
+ 'misses free throw 3 of 3',
+ 'misses hook shot',
+ 'misses jumper',
+ 'misses pullup jump shot',
+ 'misses technical free throw',
+ 'misses three point jumper',
+ 'misses tip shot',
+ 'misses two point shot',
+ 'offensive charge',
+ 'offensive foul',
+ 'offensive rebound',
+ 'out of bounds bad pass turnover',
+ 'out of bounds lost ball turnover',
+ 'personal foul',
+ 'shooting foul',
+ 'technical foul (1st technical foul)',
+ 'timeout',
+ 'traveling',
+ 'turnover',
+ 'vs.  ( gains possession)'}
 
