@@ -30,6 +30,7 @@ def clean_text(pbp_url):
 
 
 
+
 def get_players(play_text):
     '''
     Input:  The text of a play (str)
@@ -40,7 +41,17 @@ def get_players(play_text):
     return l
 
 
+def make_revised_play(play_text, players_list):
+    for player in players_list:
+        play_text = play_text.replace(player,'')
+    return play_text
 
+
+
+
+
+# Bucks vs. Thunder (game has player with periods in first name (D.J. Wilson) - rgex doesn't filter out
+#game_url = 'https://www.espn.com/nba/playbyplay?gameId=401161524'
 
 
 
