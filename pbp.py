@@ -25,3 +25,22 @@ def clean_text(pbp_url):
                         event_score.append(cell.text)
 
     return event_times, event_description, event_score
+
+
+
+
+
+def get_players(play_text):
+    '''
+    Input:  The text of a play (str)
+    Output: list of players involved in play
+    Reference: https://stackoverflow.com/questions/9525993/get-consecutive-capitalized-words-using-regex
+    '''
+    l = re.findall('([A-Z][\w-]*(?:\s+[A-Z][\w-]*)+)', play_text)
+    return l
+
+
+
+
+
+
