@@ -47,6 +47,16 @@ def make_revised_play(play_text, players_list):
     return play_text
 
 
+def make_new_text_list(play_text_list, player_list):
+    action_list = []
+    s = "[0-9]+[-][a-zA-Z'-]+"
+    for i in range(len(play_text_list)):
+        new_play = make_revised_play(play_text_list[i], player_list[i]) 
+        shot_desc = re.findall(s, new_play)
+        if shot_desc:
+            new_play = new_play.replace(shot_desc[0], '')
+        action_list.append(new_play) 
+    return action_list
 
 
 
