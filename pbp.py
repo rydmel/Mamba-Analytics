@@ -1,9 +1,7 @@
 import bs4
-
 import util
-
 import re
-
+import pandas as pd
 
 def clean_text(pbp_url):
     pbp_req = util.read_request(util.get_request(pbp_url))
@@ -18,10 +16,10 @@ def clean_text(pbp_url):
     for pbp_table in pbp_tables:
         if pbp_table.find("tr").find("th").text == "time":
             for row in pbp_table.find_all("tr"):
-                event_quarters.append(current_quarter)
                 for cell in row.find_all("td"):
                     if cell['class'] == ['time-stamp']:
                         event_times.append(cell.text)
+                        event_quarters.append(current_quarter)
                     if cell['class'] == ['game-details']:
                         event_description.append(cell.text)
                         if cell.text == 'End of the 1st Quarter':
@@ -33,7 +31,12 @@ def clean_text(pbp_url):
                     if cell['class'] == ['combined-score']:
                         event_score.append(cell.text)
 
-    return event_quarters, event_times, event_description, event_score
+    pbp_dataframe = pd.DataFrame({"quarter": event_quarters,
+                                  "time": event_times,
+                                  "description": event_description,
+                                  "score": event_score})
+
+    return pbp_dataframe
 
 
 
