@@ -36,6 +36,9 @@ def clean_text(pbp_url):
                                   "description": event_description,
                                   "score": event_score})
 
+    pbp_dataframe[["away_score", "home_score"]] = pbp_dataframe["score"].str.split("-", expand = True)
+    pbp_dataframe = pbp_dataframe.drop(["score"], axis = 1)
+
     return pbp_dataframe
 
 
