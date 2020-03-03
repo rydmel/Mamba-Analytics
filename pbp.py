@@ -13,18 +13,27 @@ def clean_text(pbp_url):
     event_times = []
     event_description = []
     event_score = []
+    event_quarters = []
+    current_quarter = 1
     for pbp_table in pbp_tables:
         if pbp_table.find("tr").find("th").text == "time":
             for row in pbp_table.find_all("tr"):
+                event_quarters.append(current_quarter)
                 for cell in row.find_all("td"):
                     if cell['class'] == ['time-stamp']:
                         event_times.append(cell.text)
                     if cell['class'] == ['game-details']:
                         event_description.append(cell.text)
+                        if cell.text == 'End of the 1st Quarter':
+                            current_quarter = 2
+                        if cell.text == 'End of the 2nd Quarter':
+                            current_quarter = 3
+                        if cell.text == 'End of the 3rd Quarter':
+                            current_quarter = 4
                     if cell['class'] == ['combined-score']:
                         event_score.append(cell.text)
 
-    return event_times, event_description, event_score
+    return event_quarters, event_times, event_description, event_score
 
 
 
