@@ -2,6 +2,7 @@ import bs4
 import util
 import re
 import pandas as pd
+import matplotlib.pyplot as plt
 
 def clean_text(pbp_url):
     pbp_req = util.read_request(util.get_request(pbp_url))
@@ -69,6 +70,19 @@ def calculate_momentum(pbp_dataframe):
                                                                         play[1]["home_score"] - play_five_minutes_ago["home_score"].iloc[0])
             
     return pbp_with_momentum
+
+
+def graph_momentum(pbp_with_momentum):
+    plt.plot(pbp_with_momentum["momentum"], color = "orange", label = "Momentum")
+    plt.plot(range(0,len(pbp_with_momentum)), [0]*len(pbp_with_momentum), color = "gray", 
+        label = "Neutral", linestyle = "--")
+    plt.title("NBA momentum by play-by-play event sequence")
+    plt.xlabel("Play-by-play event number")
+    plt.ylabel("Momentum")
+    plt.ylim(-13, 13)
+    plt.legend()
+    plt.show()
+
 
 
 def determine_momentum(away_points, home_points):
