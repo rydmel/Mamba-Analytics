@@ -7,6 +7,12 @@ import matplotlib.pyplot as plt
 def clean_text(pbp_url):
     pbp_req = util.read_request(util.get_request(pbp_url))
     pbp_soup = bs4.BeautifulSoup(pbp_req)
+
+
+    pbp_soup = bs4.BeautifulSoup(pbp_req)
+    away_team = find_team_name(pbp_soup, False)
+    home_team = find_team_name(pbp_soup, True)
+
     pbp_tables = pbp_soup.find_all("table")
 
     event_times = []
@@ -39,10 +45,20 @@ def clean_text(pbp_url):
 
     pbp_dataframe[["away_score", "home_score"]] = pbp_dataframe["score"].str.split("-", expand = True).astype('int64')
     pbp_dataframe = pbp_dataframe.drop(["score"], axis = 1)
-    #pbp_dataframe[["minutes, ""seconds"]] = pbp_dataframe["time"].str.split([":", "."], expand = True).astype('int64')
 
-    return pbp_dataframe
+    return pbp_dataframe, away_team, home_team
 
+
+def find_team_name(pbp_soup, is_home):
+    if is_home:
+        team_location = pbp_soup.find("div", class_ = "competitors sm-score").find("div", class_ = "team home")
+        
+        return team_location.find("span", class_ = "long-name").text + ' ' + team_location.find("span", class_ = "short-name").text
+    else:
+        team_location = pbp_soup.find("div", class_ = "competitors sm-score").find("div", class_ = "team away")
+        
+        return team_location.find("span", class_ = "long-name").text + ' ' + team_location.find("span", class_ = "short-name").text
+    
 
 def calculate_momentum(pbp_dataframe):
     pbp_with_momentum = pbp_dataframe[:-1].copy()
