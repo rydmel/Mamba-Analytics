@@ -8,7 +8,7 @@ class Game:
 
     	self.url = url
     	self.df = None 
-    	self.get_momentum_df = None
+    	self.momentum_df = None
     	self.get_df()
     	self.get_player_set()
     	self.get_revised_play_list()
