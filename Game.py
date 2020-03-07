@@ -1,4 +1,4 @@
-from pbp import *
+from pbp import * 
 
 
 
@@ -31,7 +31,7 @@ class Game:
     	self.text = text
 
     def get_revised_play_list(self):
-    	self.revised_play_list = self.make_new_text_list(self.text, self.players_list)
+    	self.revised_play_list = make_new_text_list(self.text, self.players_list)
     	
 
 
