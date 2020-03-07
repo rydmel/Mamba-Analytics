@@ -110,6 +110,37 @@ def make_new_text_list(play_text_list, player_list):
         action_list.append(new_play.lstrip()) 
     return action_list
 
+def calculate_points_off_timeout(play_text_list):
+    count = 0
+    reverse = play_text_list.iloc[::-1]
+    flag = 0
+    for index, row in reverse.iterrows():
+        if flag == 2:
+    	    if 'free throw' in row['description'] and 'makes' in row['description']:
+    	        count += 1
+    	    else:
+    	        flag = 0
+        if 'timeout' in row['description']:
+            flag = 1
+        elif 'makes' in row['description'] and flag:
+            if 'free throw' in row['description']:
+                count += 1
+                flag = 2
+            elif 'three point' in row['description']:
+                count += 3
+                flag = 0
+            else:
+                count += 2
+                flag = 0
+        elif 'defensive rebound' in row['description'] and flag:
+            flag = 0
+        elif 'turnover' in row['description'] and flag:
+            flag = 0
+    return count
+
+            
+
+
 
 
 # Bucks vs. Thunder (game has player with periods in first name (D.J. Wilson) - rgex doesn't filter out
