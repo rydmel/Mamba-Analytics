@@ -21,7 +21,7 @@ class Game:
     	
 
     def get_player_set(self, mode = 'df'):
-    	if mode = 'df':
+    	if mode == 'df':
     		text = list(self.df['description'])    		
     	else:
     		text = list(self.momentum_df['description'])
