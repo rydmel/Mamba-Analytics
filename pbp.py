@@ -10,12 +10,13 @@ def clean_text(pbp_url):
 
 
     pbp_soup = bs4.BeautifulSoup(pbp_req)
-    away_team = find_team_name(pbp_soup, False)
-    home_team = find_team_name(pbp_soup, True)
+    away_team, away_logo = find_team_name_and_logo(pbp_soup, False)
+    home_team, home_logo = find_team_name_and_logo(pbp_soup, True)
 
     pbp_tables = pbp_soup.find_all("table")
 
     event_times = []
+    event_team = []
     event_description = []
     event_score = []
     event_quarters = []
@@ -31,6 +32,8 @@ def clean_text(pbp_url):
                             event_times.append(cell.text + ".00")
 
                         event_quarters.append(current_quarter)
+                    if cell['class'] == ['logo']:
+                        event_team.append(cell.find("img")['src'][58:61].strip("."))
                     if cell['class'] == ['game-details']:
                         event_description.append(cell.text)
                         if 'End of the' in cell.text:
@@ -40,25 +43,26 @@ def clean_text(pbp_url):
 
     pbp_dataframe = pd.DataFrame({"quarter": event_quarters,
                                   "time": event_times,
+                                  "team": event_team,
                                   "description": event_description,
                                   "score": event_score})
 
     pbp_dataframe[["away_score", "home_score"]] = pbp_dataframe["score"].str.split("-", expand = True).astype('int64')
     pbp_dataframe = pbp_dataframe.drop(["score"], axis = 1)
 
-    return pbp_dataframe, away_team, home_team
+    return pbp_dataframe, away_team, away_logo, home_team, home_logo
 
 
-def find_team_name(pbp_soup, is_home):
+def find_team_name_and_logo(pbp_soup, is_home):
     if is_home:
         team_location = pbp_soup.find("div", class_ = "competitors sm-score").find("div", class_ = "team home")
         
-        return team_location.find("span", class_ = "long-name").text + ' ' + team_location.find("span", class_ = "short-name").text
     else:
+
+
         team_location = pbp_soup.find("div", class_ = "competitors sm-score").find("div", class_ = "team away")
         
-        return team_location.find("span", class_ = "long-name").text + ' ' + team_location.find("span", class_ = "short-name").text
-    
+    return team_location.find("span", class_ = "long-name").text + ' ' + team_location.find("span", class_ = "short-name").text, team_location.find("img", class_ = "team-logo")["src"]
 
 def calculate_momentum(pbp_dataframe):
     pbp_with_momentum = pbp_dataframe[:-1].copy()

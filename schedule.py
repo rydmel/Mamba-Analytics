@@ -5,7 +5,7 @@ import pandas as pd
 import datetime
 import requests
 
-TEAM_CODES = {'Atlanta Hawks': 'atl',
+TEAM_NAMES_TO_CODES = {'Atlanta Hawks': 'atl',
  'Boston Celtics': 'bos',
  'Brooklyn Nets': 'bkn',
  'Charlotte Hornets': 'cha',
@@ -37,8 +37,39 @@ TEAM_CODES = {'Atlanta Hawks': 'atl',
  'Utah Jazz': 'uta',
  'Washington Wizards': 'wsh'}
 
+TEAM_CODES_TO_NAMES = {'atl': 'Atlanta Hawks',
+ 'bkn': 'Brooklyn Nets',
+ 'bos': 'Boston Celtics',
+ 'cha': 'Charlotte Hornets',
+ 'chi': 'Chicago Bulls',
+ 'cle': 'Cleveland Cavaliers',
+ 'dal': 'Dallas Mavericks',
+ 'den': 'Denver Nuggets',
+ 'det': 'Detroit Pistons',
+ 'gs': 'Golden State Warriors',
+ 'hou': 'Houston Rockets',
+ 'ind': 'Indiana Pacers',
+ 'lac': 'LA Clippers',
+ 'lal': 'Los Angeles Lakers',
+ 'mem': 'Memphis Grizzlies',
+ 'mia': 'Miami Heat',
+ 'mil': 'Milwaukee Bucks',
+ 'min': 'Minnesota Timberwolves',
+ 'no': 'New Orleans Pelicans',
+ 'ny': 'New York Knicks',
+ 'okc': 'Oklahoma City Thunder',
+ 'orl': 'Orlando Magic',
+ 'phi': 'Philadelphia 76ers',
+ 'phx': 'Phoenix Suns',
+ 'por': 'Portland Trail Blazers',
+ 'sa': 'San Antonio Spurs',
+ 'sac': 'Sacramento Kings',
+ 'tor': 'Toronto Raptors',
+ 'uta': 'Utah Jazz',
+ 'wsh': 'Washington Wizards'}
 
-def find_team_codes():
+
+def find_team_codes(names_to_codes):
     team_codes_dict = {}
     teams_list_request = util.read_request(util.get_request("https://www.espn.com/nba/teams"))
     teams_soup = bs4.BeautifulSoup(teams_list_request)
@@ -46,8 +77,12 @@ def find_team_codes():
 
 
     for team in NBA_teams:
-        team_codes_dict[team.find("div", class_ = "pl3").find("a").find("h2").text] = \
-            team.find("a")["href"][17:20].strip("/")
+        if names_to_codes:
+            team_codes_dict[team.find("div", class_ = "pl3").find("a").find("h2").text] = \
+                team.find("a")["href"][17:20].strip("/")
+        else:
+            team_codes_dict[team.find("a")["href"][17:20].strip("/")] = \
+                team.find("div", class_ = "pl3").find("a").find("h2").text
 
     return team_codes_dict
 
@@ -62,7 +97,7 @@ def get_team_schedule(team_name, season, season_type):
         season_type_code = "3"
     schedule_request = util.read_request(
         util.get_request(
-        "https://www.espn.com/nba/team/schedule/_/name/{}/season/{}/seasontype/{}".format(TEAM_CODES[team_name], season[-4:], season_type_code)))
+        "https://www.espn.com/nba/team/schedule/_/name/{}/season/{}/seasontype/{}".format(TEAM_NAMES_TO_CODES[team_name], season[-4:], season_type_code)))
     schedule_soup = bs4.BeautifulSoup(schedule_request)
     schedule_table = schedule_soup.find("tbody")
 

@@ -14,7 +14,7 @@ class Game:
     	self.get_revised_play_list()
 
     def get_game_info(self):
-    	self.df, self.away_team, self.home_team = clean_text(self.url)
+    	self.df, self.away_team, self.away_logo, self.home_team, self.home_logo = clean_text(self.url)
 
     def get_momentum_df(self):
     	self.momentum_df = calculate_momentum(self.df)
