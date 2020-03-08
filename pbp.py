@@ -137,7 +137,7 @@ def calculate_points_off_timeout(play_text_list):
     flag = 0
     for index, row in reverse.iterrows():
         if flag == 2:
-    	    if 'free throw' in row['description'] and 'makes' in row['description']:
+    	    if 'makes' in row['description'] and 'free throw' in row['description']:
     	        count += 1
     	    else:
     	        flag = 0
@@ -153,11 +153,12 @@ def calculate_points_off_timeout(play_text_list):
             else:
                 count += 2
                 flag = 0
-        elif 'defensive rebound' in row['description'] and flag:
+        elif 'defensive' in row['description'] and 'rebound' in row['description'] and flag:
             flag = 0
         elif 'turnover' in row['description'] and flag:
             flag = 0
     return count
+
 
             
 
