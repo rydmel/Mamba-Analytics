@@ -6,7 +6,7 @@ class Game:
 
     def __init__(self, game_id):
 
-    	self.url = "https://www.espn.com/nba/playbyplay?gameId=" + game_id
+    	self.url = "https://www.espn.com/nba/playbyplay?gameId=" + str(game_id)
     	self.df = None 
     	self.momentum_df = None
     	self.get_game_info()
