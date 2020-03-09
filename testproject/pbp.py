@@ -80,12 +80,16 @@ def find_team_name_and_logo(pbp_soup, is_home):
     '''
 
     if is_home:
-        team_location = pbp_soup.find("div", class_ = "competitors sm-score").find("div", class_ = "team home")
+        if pbp_soup.find("div", class_ = "competitors sm score"):
+            team_location = pbp_soup.find("div", class_ = "competitors sm-score").find("div", class_ = "team home")
+        else:
+            team_location = pbp_soup.find("div", class_ = "competitors").find("div", class_ = "team home")
         
     else:
-
-
-        team_location = pbp_soup.find("div", class_ = "competitors sm-score").find("div", class_ = "team away")
+        if pbp_soup.find("div", class_ = "competitors sm score"):
+            team_location = pbp_soup.find("div", class_ = "competitors sm-score").find("div", class_ = "team away")
+        else:
+            team_location = pbp_soup.find("div", class_ = "competitors").find("div", class_ = "team away")
         
     return team_location.find("span", class_ = "long-name").text + ' ' + team_location.find("span", class_ = "short-name").text, team_location.find("img", class_ = "team-logo")["src"]
 
