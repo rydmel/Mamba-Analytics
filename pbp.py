@@ -135,6 +135,12 @@ def calculate_momentum(pbp_dataframe):
 
 
 def graph_momentum(pbp_with_momentum):
+    '''
+    Plots momentum on a graph for easy visualization
+
+    Inputs: pbp_with_momentum- Pandas dataframe
+    '''
+
     plt.plot(pbp_with_momentum["momentum"], color = "orange", label = "Momentum")
     plt.plot(range(0,len(pbp_with_momentum)), [0]*len(pbp_with_momentum), color = "gray", 
         label = "Neutral", linestyle = "--")
@@ -148,6 +154,17 @@ def graph_momentum(pbp_with_momentum):
 
 
 def determine_momentum(away_points, home_points):
+    '''
+    Formula for calculating momentum level at a given play
+
+    Inputs:
+        away_points- integer representing away team's points
+        home_points- integer representing home team's points
+
+    Returns:
+        momentum- floating point number representing momentum level
+    '''
+
     if away_points > home_points:
         return -1 * float((away_points + 1) / (home_points + 1))
     else:
@@ -164,6 +181,13 @@ def get_players(play_str):
     return l
 
 def get_big_player_list(text_list):
+    '''
+    Returns all players involved from a list of plays
+
+    Inputs: text_list- list of plays
+    Returns: l- list of players
+    '''
+    
     l = []
     for play in text_list:
         l.append(get_players(play))
