@@ -66,11 +66,9 @@ def find_team_name_and_logo(pbp_soup, is_home):
 
 def calculate_momentum(pbp_dataframe):
     pbp_with_momentum = pbp_dataframe[:-1].copy()
-    #pbp_with_momentum["momentum"] = 0.0
     momentum_list = []
     pbp_dataframe["datetime"] = pd.to_datetime(pbp_dataframe["time"], format = "%M:%S.%f")
     for play in pbp_dataframe.iterrows():
-        print(play)
         is_overtime = False
         if play[1]["quarter"] >= 5:
             is_overtime = True
