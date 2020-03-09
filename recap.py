@@ -65,11 +65,14 @@ TIMEOUTS_SENTENCES = [
     "'s head coach opted to use his timeouts when momentum was {} the favor of his team, on average.",
     "'s coach was particularly inclined to call timeouts while momentum was {} his team's favor."
 ]
+
 def generate_recap_text(game_object):
 
     selected_play_numbers = select_momentum_shifting_plays(game_object)
 
     title_text = generate_title_text(game_object)
+
+    odds_text = generate_odds_text(game_object)
 
     plays_text = ""
     for i in selected_play_numbers:
@@ -80,7 +83,7 @@ def generate_recap_text(game_object):
     timeouts_text = generate_timeouts_text(game_object)
     
     
-    return title_text, plays_text, timeouts_text
+    return title_text, odds_text, plays_text, timeouts_text
 
 
 def generate_title_text(game_object):
@@ -345,6 +348,42 @@ def determine_timeouts_momentum(game_object):
     else:
         return (away_team_cummulative_momentum / away_team_timeouts_counter,
                 home_team_cummulative_momentum / home_team_timeouts_counter)
+
+def generate_odds_text(game_object):
+    game_object.get_odds_info()
+
+    odds_text = "Line Result: "
+    spread = float(game_object.line[-5:].strip(" "))
+    if "EVEN" in game_object.line:
+        if game_object.df.tail(1).away_score.iloc[0] > game_object.df.tail(1).home_score.iloc[0]:
+            odds_text += extract_team_nickname(game_object.home_team) + " win pick'em.  "
+        else:
+            odds_text += extract_team_nickname(game_object.away_team) + " win pick'em. "
+    elif game_object.line[:3].strip(" ") + ".png" in game_object.home_logo:
+        if game_object.df.tail(1).away_score.iloc[0] == game_object.df.tail(1).home_score.iloc[0] - spread:
+            odds_text += "PUSH.  "
+        elif game_object.df.tail(1).away_score.iloc[0] > game_object.df.tail(1).home_score.iloc[0] - spread:
+            odds_text += extract_team_nickname(game_object.away_team) + " cover as underdogs.  "
+        else:
+            odds_text += extract_team_nickname(game_object.home_team) + " cover as favorites.  "
+    else:
+        if game_object.df.tail(1).away_score.iloc[0] - spread == game_object.df.tail(1).home_score.iloc[0]:
+            odds_text += "PUSH.  "
+        elif game_object.df.tail(1).away_score.iloc[0] - spread > game_object.df.tail(1).home_score.iloc[0]:
+            odds_text += extract_team_nickname(game_object.away_team) + " cover as favorites.  "
+        else:
+            odds_text += extract_team_nickname(game_object.home_team) + " cover as underdogs.  "
+  
+
+    odds_text += "Over/Under Result: "
+    if game_object.over_under == game_object.df.tail(1).away_score.iloc[0] + game_object.df.tail(1).home_score.iloc[0]:
+        odds_text += "PUSH."
+    elif game_object.over_under >= game_object.df.tail(1).away_score.iloc[0] + game_object.df.tail(1).home_score.iloc[0]:
+        odds_text += "UNDER."
+    else:
+        odds_text += "OVER."
+
+    return odds_text
 
 
 def extract_team_city(team_name_string):
