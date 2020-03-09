@@ -82,7 +82,7 @@ def calculate_momentum(pbp_dataframe):
         else:
             if five_minutes_ago >= 12:
                 if play[1]["quarter"] == 1:
-                    pbp_with_momentum["momentum"][play[0]] = determine_momentum(play[1]["away_score"], play[1]["home_score"])
+                    pbp_with_momentum["momentum"][play[0]] = ((play[1]["datetime"].minute * 60 + play[1]["datetime"].second) / 300) * determine_momentum(play[1]["away_score"], play[1]["home_score"])
                 else:
                     play_five_minutes_ago = pbp_dataframe[(pbp_dataframe["quarter"] == (play[1]["quarter"] - 1)) &
                                                           (pbp_dataframe["datetime"].dt.minute <= five_minutes_ago - 12) &
@@ -106,7 +106,7 @@ def graph_momentum(pbp_with_momentum):
     plt.title("NBA momentum by play-by-play event sequence")
     plt.xlabel("Play-by-play event number")
     plt.ylabel("Momentum")
-    plt.ylim(-13, 13)
+    plt.ylim(-14, 14)
     plt.legend()
     plt.show()
 
