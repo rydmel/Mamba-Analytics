@@ -1,29 +1,29 @@
 from django.shortcuts import render
+from django import forms
 
-posts = [
-	{
-		'author': 'Jesse',
-		'title': 'Post 1',
-		'content': 'Post 1 content',
-		'date_posted': 'March 7, 2020'
-	},
-	{
-		'author': 'Ryan',
-		'title': 'Post 2',
-		'content': 'Post 2 content',
-		'date_posted': 'March 8, 2020'
-	}
-]
+import Game
+
+
+class GameEntry(forms.Form):
+
+	game_id = forms.IntegerField(
+		label = "Game ID",
+		help_text= "Example: 401161524",
+		required = True)
 
 
 def home(request):
-	context = {
-		'posts': posts
-	}
-	return render(request, 'stats/home.html', context)
+	info = {}
+	if request.method == 'GET':
+		form = GameEntry(request.GET)
+		info['response'] = form
+		if form.is_valid():
+			game = Game.Game(str(form.cleaned_data['game_id']))
+			info['random_player'] = game.players_list[10]
+	info['game_form'] = form
+	return render(request, 'stats/home.html', info)
 
-def about(request):
-	return render(request, 'stats/about.html', {'title':'About'})
+
 
  
 

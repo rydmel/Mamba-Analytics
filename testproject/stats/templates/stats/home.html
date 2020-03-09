@@ -1,15 +1,32 @@
-{% extends "stats/base.html" %}
-{% block content%}
-	{% for post in posts %}
-		<article class="media content-section">
-		  <div class="media-body">
-		    <div class="article-metadata">
-		      <a class="mr-2" href="#">{{ post.author }}</a>
-		      <small class="text-muted">{{ post.date_posted }}</small>
-		    </div>
-		    <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-		    <p class="article-content">{{ post.content }}</p>
-		  </div>
-		</article>
-	{% endfor %}
-{% endblock content %}
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+
+    </head>
+    <img src=  "https://clutchpoints.com/wp-content/uploads/2017/12/Michael-Jordan-and-Kobe-Bryant-e1513636737304.jpg", width=500, style="float:right">
+    <body>
+        <h1> Welcome to our Project Page - Mamba Analytics. </h1>
+        <p>
+            This project is designed to analyze play-by-play data from NBA games
+        </p>
+
+
+        <font color='red'>
+            <strong> {{ game_id }} </strong>
+        </font>
+        <p>
+            
+        </p> 
+        <div class= "frame">
+        <form method="get">
+            <table class="address">
+                {{ game_form }}
+            </table>
+                <input type="submit" value="Submit" />
+        </form>
+        </div>
+
+    </body>
+    <img src=  "https://www.multichannel.com/.image/t_share/MTU0MDYzNjQ2NTk2MzQyODY2/espn-logojpg.jpg", width=300, style="float:bottom">
+</html>
