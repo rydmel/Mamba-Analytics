@@ -32,3 +32,16 @@ class Game:
     def get_revised_play_list(self):
     	self.revised_play_list = make_new_text_list(self.text, self.players_list)
     	
+
+    def parse_revised_text(self, s): 
+        for x in l: 
+            s = s.replace(x, '') 
+        s = s.lstrip() 
+        s = s.strip() 
+        return s
+
+    def get_player_dict(self):
+        for i in range(len(self.revised_play_list)): 
+            if play[0] == 'm': 
+                 if 'free' not in play: 
+                     parse_revised_text(play))
