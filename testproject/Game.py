@@ -40,8 +40,8 @@ class Game:
         s = s.strip() 
         return s
 
-    def get_player_dict(self):
+    '''def get_player_dict(self):
         for i in range(len(self.revised_play_list)): 
             if play[0] == 'm': 
                  if 'free' not in play: 
-                     parse_revised_text(play)
+                     parse_revised_text(play))'''
