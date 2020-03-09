@@ -5,6 +5,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def clean_text(pbp_url):
+    '''
+    Takes URL of an ESPN NBA play-by-play page and creates an
+    organized dataframe with play descriptions, time, and score
+
+    Input: pbp_url- a URL string
+    Returns: 
+        pbp_dataframe- Pandas dataframe
+        away_logo- PNG image of away team's logo
+        away_team- name of away team
+        home_team- name of home team
+        home_logo- PNG image of home team's logo
+
+    '''
+
     pbp_req = util.read_request(util.get_request(pbp_url))
     pbp_soup = bs4.BeautifulSoup(pbp_req)
 
@@ -54,6 +68,17 @@ def clean_text(pbp_url):
 
 
 def find_team_name_and_logo(pbp_soup, is_home):
+    '''
+    Takes BeautifulSoup object and extracts team name
+
+    Inputs: 
+        pbp_soup- BeautifulSoup object
+        is_home- Boolean indicating whether name of desired team is home or away
+
+    Returns:
+        team_name- team name in string form
+    '''
+
     if is_home:
         team_location = pbp_soup.find("div", class_ = "competitors sm-score").find("div", class_ = "team home")
         
@@ -65,6 +90,14 @@ def find_team_name_and_logo(pbp_soup, is_home):
     return team_location.find("span", class_ = "long-name").text + ' ' + team_location.find("span", class_ = "short-name").text, team_location.find("img", class_ = "team-logo")["src"]
 
 def calculate_momentum(pbp_dataframe):
+    '''
+    Calculates momentum for each play
+
+    Inputs: pbp_dataframe- Pandas dataframe returned from clean_text
+
+    Returns: pbp_with_momentum- Dataframe with momentum column appended
+    '''
+    
     pbp_with_momentum = pbp_dataframe[:-1].copy()
     pbp_with_momentum["momentum"] = 0.0
     pbp_dataframe["datetime"] = pd.to_datetime(pbp_dataframe["time"], format = "%M:%S.%f")
