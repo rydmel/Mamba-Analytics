@@ -23,40 +23,40 @@ TITLES = [
 
 
 MISSED_SHOT_SENTENCES = [
-    ("A fruitless {}-point attempt by {} in the {} quarter did his team no favors, causing the {} to gain more momentum.  ",
+    ("A fruitless {}-point attempt by {} in the {} did his team no favors, causing the {} to gain more momentum.  ",
         ["points", "player", "quarter", "opposing_team_nickname"]),
-    ("A missed shot by {} with {} to go in the {} quarter helped to further fuel a scoring run by {}.  ",
+    ("A missed shot by {} with {} to go in the {} helped to further fuel a scoring run by {}.  ",
         ["player", "minutes", "quarter", "opposing_team_city"]),
-    ("With {} minutes left in the {} quarter, {}'s missed {}-point shot, led to a signifiant loss in momentum for {}.  ",
-        ["minutes", "quarter", "points", "player_team_city"]),
-    ("A {}-point shot attempt by {} in the {} quarter led to zero points and a significant swing in momentum in his opponents' favor.  ",
+    ("With {} minutes left in the {}, {}'s missed {}-point shot, led to a signifiant loss in momentum for {}.  ",
+        ["minutes", "quarter", "player", "points", "player_team_city"]),
+    ("A {}-point shot attempt by {} in the {} led to zero points and a significant swing in momentum in his opponents' favor.  ",
         ["points", "player", "quarter"]),
-    ("Unable to hit from {} the arc, a {} shot in the {} quarter fueled a run by {}.  ",
+    ("Unable to hit from {} the arc, a {} shot in the {} fueled a run by {}.  ",
         ["inside_or_outside", "player", "quarter", "opposing_team_city"])]
 
 MADE_SHOT_SENTENCES = [
-    ("In the {} quarter, {} hit a {}-point shot to make the score {}.  ",
+    ("In the {}, {} hit a {}-point shot to make the score {}.  ",
         ["quarter", "player", "points", "score"]),
-    ("{} the {} half, a {} shot for {} points swung the momentum in {}'s favor.  ",
+    ("{} the {}, a {} shot for {} points swung the momentum in {}'s favor.  ",
         ["relative_time", "half", "player", "points", "player_team_city"]),
-    ("A made {} point shot by {} with {} minutes left in the {} quarter went down as one of the most impactful plays on the flow of the game.  ",
+    ("A made {} point shot by {} with {} minutes left in the {} went down as one of the most impactful plays on the flow of the game.  ",
         ["points", "player", "minutes", "quarter"]),
-    ("{} had a timely made bucket with {} minutes to go in the {} quarter, which {}{} points.  ",
+    ("{} had a timely made bucket with {} minutes to go in the {}, which {}{} points.  ",
         ["player", "minutes", "quarter", "lead_increase_or_decrease", "lead"]),
-    ("With {} minutes to go in the {} quarter, a shot made by {}, good for {} points, greatly helped to build momentum for his team.  ",
+    ("With {} minutes to go in the {}, a shot made by {}, good for {} points, greatly helped to build momentum for his team.  ",
         ["minutes", "quarter", "player", "points"])
 ]
 
 REBOUND_SENTENCES = [
-    ("While perhaps unbeknownst to him at the time ({} to go in the {} quarter), {}'s succesful attempt to secure a failed shot from {} was game_altering.  ",
+    ("While perhaps unbeknownst to him at the time ({} to go in the {}), {}'s successful attempt to secure a failed shot from {} was game_altering.  ",
         ["minutes", "quarter", "player", "shooter"]),
     ("After an ill-fated shot attempt from {}, {} secured the rebound for the {} and the additional momentum that went with it.  ",
         ["shooter", "player", "player_team_nickname"]),
-    ("With {} to go in the {} quarter, {} tallied a rebound off a {} shot.  ",
+    ("With {} to go in the {}, {} tallied a rebound off a {} shot.  ",
         ["minutes", "quarter", "player", "shooter"]),
-    ("A succesful rebound by {} in the {} half had significant impact on the game's flow.  ",
+    ("A succesful rebound by {} in the {} had significant impact on the game's flow.  ",
         ["player", "half"]),
-    ("{} rebound by {} with {} minutes and {} seconds to go in the {} quarter swung the momentum in his team's favor.  ",
+    ("{} rebound by {} with {} minutes and {} seconds to go in the {} swung the momentum in his team's favor.  ",
         ["offensive_or_defensive", "player", "minutes", "seconds", "quarter"])
 ]
 
@@ -67,11 +67,13 @@ def generate_recap_text(game_object):
 
     title_text = generate_title_text(game_object)
 
-    play_text = ""
+    plays_text = ""
     for i in selected_play_numbers:
-        play_text += generate_text_for_a_play(i, game_object)
+        play_text = generate_text_for_a_play(i, game_object)
+        if play_text:
+            plays_text += play_text
 
-    return title_text, play_text
+    return title_text, plays_text
 
 
 def generate_title_text(game_object):
@@ -159,26 +161,35 @@ def generate_text_for_a_play(selected_play_number, game_object):
         result = "make"
     elif "rebound" in selected_play.description:
         result = "rebound"
-
-    if result:
-        if result == "miss":
-            selected_sentence = random.sample(MISSED_SHOT_SENTENCES, 1)
-        if result == "make":
-            selected_sentence = random.sample(MADE_SHOT_SENTENCES, 1)
-        if result == "rebound":
-            selected_sentence = random.sample(REBOUND_SENTENCES, 1)
+    else:
+        return None
+    
+    if result == "miss":
+        selected_sentence = random.sample(MISSED_SHOT_SENTENCES, 1)
+    elif result == "make":
+        selected_sentence = random.sample(MADE_SHOT_SENTENCES, 1)
+    elif result == "rebound":
+        selected_sentence = random.sample(REBOUND_SENTENCES, 1)
 
     list_to_paste = []
     for i in selected_sentence[0][1]:
         if i == "quarter":
             if selected_play.quarter == 1:
-                list_to_paste.append("1st")
+                list_to_paste.append("1st quarter")
             elif selected_play.quarter == 2:
-                list_to_paste.append("2nd")
+                list_to_paste.append("2nd quarter")
             elif selected_play.quarter == 3:
-                list_to_paste.append("3rd")
+                list_to_paste.append("3rd quarter")
             elif selected_play.quarter == 4:
-                list_to_paste.append("4th")
+                list_to_paste.append("4th quarter")
+            elif selected_play.quarter == 5:
+                list_to_paste.append("1st overtime period")
+            elif selected_play.quarter == 6:
+                list_to_paste.append("2nd overtime period")
+            elif selected_play.quarter == 7:
+                list_to_paste.append("3rd overtime period")
+            else:
+                list_to_paste.append(str(selected_play.quarter) + "th overtime period")
         elif i == "player":
             list_to_paste.append(pbp.get_players(selected_play.description)[0])
         elif i == "points":
@@ -253,9 +264,9 @@ def generate_text_for_a_play(selected_play_number, game_object):
                 list_to_paste.append(extract_team_nickname(game_object.home_team))
         elif i == "opposing_team_city":
             if selected_play.team + ".png" in game_object.home_logo:
-                extract_team_city(game_object.home_team)
+                list_to_paste.append(extract_team_city(game_object.home_team))
             else:
-                extract_team_city(game_object.away_team)
+                list_to_paste.append(extract_team_city(game_object.away_team))
         elif i == "inside_or_outside":
             if "three" in selected_play.description:
                 list_to_paste.append("outside")
