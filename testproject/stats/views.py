@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django import forms
 
 import Game
+import recap 
 
 
 class GameEntry(forms.Form):
@@ -19,7 +20,7 @@ def home(request):
 		info['response'] = form
 		if form.is_valid():
 			game = Game.Game(str(form.cleaned_data['game_id']))
-			info['random_player'] = game.players_list[10]
+			info['recap_text'] = recap.generate_recap_text(game)
 	info['game_form'] = form
 	return render(request, 'stats/home.html', info)
 
