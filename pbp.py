@@ -66,9 +66,11 @@ def find_team_name_and_logo(pbp_soup, is_home):
 
 def calculate_momentum(pbp_dataframe):
     pbp_with_momentum = pbp_dataframe[:-1].copy()
-    pbp_with_momentum["momentum"] = 0.0
+    #pbp_with_momentum["momentum"] = 0.0
+    momentum_list = []
     pbp_dataframe["datetime"] = pd.to_datetime(pbp_dataframe["time"], format = "%M:%S.%f")
     for play in pbp_dataframe.iterrows():
+        print(play)
         is_overtime = False
         if play[1]["quarter"] >= 5:
             is_overtime = True
@@ -77,25 +79,27 @@ def calculate_momentum(pbp_dataframe):
             play_five_minutes_ago = pbp_dataframe[(pbp_dataframe["quarter"] == (play[1]["quarter"] - 1)) &
                                                           (pbp_dataframe["datetime"].dt.minute <= five_minutes_ago - 5) &
                                                           (pbp_dataframe["datetime"].dt.second <= play[1]["datetime"].second)].head(1)
-            pbp_with_momentum["momentum"][play[0]] = determine_momentum(play[1]["away_score"] - play_five_minutes_ago["away_score"].iloc[0],
-                                                                        play[1]["home_score"] - play_five_minutes_ago["home_score"].iloc[0]) 
+            momentum_list.append(determine_momentum(play[1]["away_score"] - play_five_minutes_ago["away_score"].iloc[0],
+                                                                        play[1]["home_score"] - play_five_minutes_ago["home_score"].iloc[0]))
         else:
             if five_minutes_ago >= 12:
                 if play[1]["quarter"] == 1:
-                    pbp_with_momentum["momentum"][play[0]] = ((play[1]["datetime"].minute * 60 + play[1]["datetime"].second) / 300) * determine_momentum(play[1]["away_score"], play[1]["home_score"])
+                    momentum_list.append(((play[1]["datetime"].minute * 60 + play[1]["datetime"].second) / 300) * determine_momentum(play[1]["away_score"], play[1]["home_score"]))
                 else:
                     play_five_minutes_ago = pbp_dataframe[(pbp_dataframe["quarter"] == (play[1]["quarter"] - 1)) &
                                                           (pbp_dataframe["datetime"].dt.minute <= five_minutes_ago - 12) &
                                                           (pbp_dataframe["datetime"].dt.second <= play[1]["datetime"].second)].head(1)
-                    pbp_with_momentum["momentum"][play[0]] = determine_momentum(play[1]["away_score"] - play_five_minutes_ago["away_score"].iloc[0],
-                                                                                play[1]["home_score"] - play_five_minutes_ago["home_score"].iloc[0])        
+                    momentum_list.append(determine_momentum(play[1]["away_score"] - play_five_minutes_ago["away_score"].iloc[0],
+                                                                                play[1]["home_score"] - play_five_minutes_ago["home_score"].iloc[0]))     
             else:
                 play_five_minutes_ago = pbp_dataframe[(pbp_dataframe["quarter"] == (play[1]["quarter"])) &
                                                       (pbp_dataframe["datetime"].dt.minute <= five_minutes_ago) &
                                                       (pbp_dataframe["datetime"].dt.second <= play[1]["datetime"].second)].head(1)
-                pbp_with_momentum["momentum"][play[0]] = determine_momentum(play[1]["away_score"] - play_five_minutes_ago["away_score"].iloc[0],
-                                                                            play[1]["home_score"] - play_five_minutes_ago["home_score"].iloc[0])
-                
+                momentum_list.append(determine_momentum(play[1]["away_score"] - play_five_minutes_ago["away_score"].iloc[0],
+                                                                             play[1]["home_score"] - play_five_minutes_ago["home_score"].iloc[0]))
+    
+    pbp_with_momentum["momentum"] = momentum_list[:len(momentum_list) - 1] 
+
     return pbp_with_momentum
 
 
