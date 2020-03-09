@@ -60,7 +60,11 @@ REBOUND_SENTENCES = [
         ["offensive_or_defensive", "player", "minutes", "seconds", "quarter"])
 ]
 
-
+TIMEOUTS_SENTENCES = [
+    "'s head coach called timeouts when, on average, momentum was {} his team's favor.",
+    "'s head coach opted to use his timeouts when momentum was {} the favor of his team, on average.",
+    "'s coach was particularly inclined to call timeouts while momentum was {} his team's favor."
+]
 def generate_recap_text(game_object):
 
     selected_play_numbers = select_momentum_shifting_plays(game_object)
@@ -73,7 +77,10 @@ def generate_recap_text(game_object):
         if play_text:
             plays_text += play_text
 
-    return title_text, plays_text
+    timeouts_text = generate_timeouts_text(game_object)
+    
+    
+    return title_text, plays_text, timeouts_text
 
 
 def generate_title_text(game_object):
@@ -296,7 +303,49 @@ def generate_text_for_a_play(selected_play_number, game_object):
         return selected_sentence[0][0].format(list_to_paste[0], list_to_paste[1], list_to_paste[2], list_to_paste[3], list_to_paste[4])
     elif len(list_to_paste) == 6:
         return selected_sentence[0][0].format(list_to_paste[0], list_to_paste[1], list_to_paste[2], list_to_paste[3], list_to_paste[4], list_to_paste[5])
-    
+
+
+def generate_timeouts_text(game_object):
+    away_timeout_avg_momentum, home_timeout_avg_momentum = determine_timeouts_momentum(game_object)
+
+    timeouts_text = ""
+    if away_timeout_avg_momentum >= 0:
+        timeouts_text += extract_team_city(game_object.away_team) + random.sample(TIMEOUTS_SENTENCES, 1)[0].format("not in") + "  "
+    else:
+        timeouts_text += extract_team_city(game_object.away_team) + random.sample(TIMEOUTS_SENTENCES, 1)[0].format("in") + "  "
+    if home_timeout_avg_momentum <= 0:
+        timeouts_text += extract_team_city(game_object.home_team) + random.sample(TIMEOUTS_SENTENCES, 1)[0].format("not in")
+    else:
+        timeouts_text += extract_team_city(game_object.home_team) + random.sample(TIMEOUTS_SENTENCES, 1)[0].format("in")
+
+    return timeouts_text
+
+
+def determine_timeouts_momentum(game_object):
+
+    timeouts = game_object.momentum_df[game_object.momentum_df["description"].str.find("timeout") != -1]
+    away_team_timeouts_counter = 0
+    away_team_cummulative_momentum = 0.0
+    home_team_timeouts_counter = 0
+    home_team_cummulative_momentum = 0.0
+    for i in timeouts.iterrows():
+        if i[1].team + ".png" in game_object.home_logo:
+            home_team_timeouts_counter += 1
+            home_team_cummulative_momentum += i[1].momentum
+        else:
+            away_team_timeouts_counter += 1
+            away_team_cummulative_momentum += i[1].momentum
+
+    if home_team_timeouts_counter == 0 and away_team_timeouts_counter == 0:
+        return (0, 0)
+    elif home_team_timeouts_counter == 0: 
+        return (away_team_cummulative_momentum / away_team_timeouts_counter, 0)
+    elif away_team_timeouts_counter == 0:
+        return (0, home_team_cummulative_momentum / home_team_timeouts_counter)
+    else:
+        return (away_team_cummulative_momentum / away_team_timeouts_counter,
+                home_team_cummulative_momentum / home_team_timeouts_counter)
+
 
 def extract_team_city(team_name_string):
     team_name_split = team_name_string.split(" ")
