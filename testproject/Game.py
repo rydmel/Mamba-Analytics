@@ -27,15 +27,19 @@ class Game:
 
     def get_game_info(self):
         '''    
-        Makes attributes df (Pandas DataFrame), away_team (str), home_team (str), home_logo (PNG image)    
+        Makes attributes df (Pandas DataFrame), away_team (str), 
+        home_team (str), home_logo (PNG image)    
         '''
-        self.df, self.away_team, self.away_logo, self.home_team, self.home_logo = clean_text(self.url)
+        
+        self.df, self.away_team, self.away_logo, self.home_team, \
+        self.home_logo = clean_text(self.url)
 
 
     def get_momentum_df(self):
         '''
         Makes attribute momentum_df (Pandas DataFrame)    
         '''
+
         self.momentum_df = calculate_momentum(self.df)
 
 
@@ -43,14 +47,21 @@ class Game:
         '''
         Makes attributes line (str), over_under (str)    
         '''
-        odds_request = util.read_request(util.get_request("https://www.espn.com/nba/game?gameId={}".format(self.game_id)))
+
+        odds_request = util.read_request(
+            util.get_request(
+                "https://www.espn.com/nba/game?gameId={}".format(self.game_id)))
         odds_soup = bs4.BeautifulSoup(odds_request)
 
-        if odds_soup.find("div", id = "gamepackage-game-information").find("div", class_ = "odds-details"):
+        if odds_soup.find("div", id = "gamepackage-game-information").\
+        find("div", class_ = "odds-details"):
 
-            odds_section = odds_soup.find("div", id = "gamepackage-game-information").find("div", class_ = "odds-details").find("ul")            
+            odds_section = odds_soup.find("div", 
+                id = "gamepackage-game-information").find("div", 
+                class_ = "odds-details").find("ul")            
             self.line = odds_section.find("li").text.strip("Line: ").lower()
-            self.over_under = float(odds_section.find("li", class_ = "ou").text.strip("\n\t")[-3:])
+            self.over_under = float(odds_section.find("li", class_ = "ou").\
+                text.strip("\n\t")[-3:])
             
 
     def get_player_set(self, mode = 'df'):
@@ -59,6 +70,7 @@ class Game:
     
         Makes attributes players_list (list), player_set (set), text (list)    
         '''
+
         if mode == 'df':
             text = list(self.df['description'])    		
         else:
@@ -71,8 +83,10 @@ class Game:
 
     def get_revised_play_list(self):
         '''
-        Makes attribute revised_play_list (list), which is a list of all the plays after players and numbers are cleaned
+        Makes attribute revised_play_list (list), which is a list of all the plays 
+        after players and numbers are cleaned
         '''
+
         self.revised_play_list = make_new_text_list(self.text, self.players_list)
         
 
@@ -82,6 +96,7 @@ class Game:
         Inputs: s (str), which will be a revised play
         Output: the type of shot attempt (str)
         '''
+
         for x in ['makes', 'misses', '( assists)']: 
             s = s.replace(x, '') 
         s = s.lstrip() 
@@ -91,12 +106,18 @@ class Game:
 
     def get_player_dict(self):
         '''
-        Makes attribute shot_selection_dict (dict), which is a dict of players' types of shot attempts w/ frequency
+        Makes attribute shot_selection_dict (dict), which is a dict of players' 
+        types of shot attempts w/ frequency
         '''
+
         self.shot_selection_dict = {}
         for i in range(len(self.revised_play_list)):
             play = self.revised_play_list[i]
             if play[0] == 'm': 
                  if 'free' not in play:
-                    self.shot_selection_dict[self.players_list[i][0]] = self.shot_selection_dict.get(self.players_list[i][0], {})
-                    self.shot_selection_dict[self.players_list[i][0]][self.parse_revised_text(play)] = self.shot_selection_dict[self.players_list[i][0]].get(self.parse_revised_text(play), 0) + 1
+                    self.shot_selection_dict[self.players_list[i][0]] = \
+                    self.shot_selection_dict.get(self.players_list[i][0], {})
+                    self.shot_selection_dict[self.players_list[i][0]]\
+                    [self.parse_revised_text(play)] = self.shot_selection_dict\
+                    [self.players_list[i][0]].get(
+                        self.parse_revised_text(play), 0) + 1
