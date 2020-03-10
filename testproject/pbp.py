@@ -181,7 +181,7 @@ def get_players(play_str):
     Reference: https://stackoverflow.com/questions/9525993/get-consecutive-capitalized-words-using-regex
     '''
     #might need to consider apostrophe for players with one in their name
-    l = re.findall(r"([A-Z][A-Za-z.-]+(?=\s[A-Z])(?:\s[A-Z][A-Za-z.-]+)+)", play_str)
+    l = re.findall(r"([A-Z][A-Za-z.\'-]+(?=\s[A-Z])(?:\s[A-Z][A-Za-z.\'-]+)+)", play_str)
     return l
 
 def get_big_player_list(text_list):
