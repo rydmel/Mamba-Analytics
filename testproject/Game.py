@@ -11,6 +11,8 @@ class Game:
         self.url = "https://www.espn.com/nba/playbyplay?gameId=" + str(game_id)
         self.game_id = game_id
         self.df = None 
+        self.line = None
+        self.over_under = None
         self.momentum_df = None
         self.get_game_info()
         self.get_player_set()
@@ -26,11 +28,12 @@ class Game:
         odds_request = util.read_request(util.get_request("https://www.espn.com/nba/game?gameId={}".format(self.game_id)))
         odds_soup = bs4.BeautifulSoup(odds_request)
 
-        odds_section = odds_soup.find("div", id = "gamepackage-game-information").find("div", class_ = "odds-details").find("ul")
-        
-        self.line = odds_section.find("li").text.strip("Line: ").lower()
-        self.over_under = float(odds_section.find("li", class_ = "ou").text.strip("\n\t")[-3:])
-        
+        if odds_soup.find("div", id = "gamepackage-game-information").find("div", class_ = "odds-details"):
+
+            odds_section = odds_soup.find("div", id = "gamepackage-game-information").find("div", class_ = "odds-details").find("ul")            
+            self.line = odds_section.find("li").text.strip("Line: ").lower()
+            self.over_under = float(odds_section.find("li", class_ = "ou").text.strip("\n\t")[-3:])
+            
     def get_player_set(self, mode = 'df'):
         if mode == 'df':
             text = list(self.df['description'])    		
