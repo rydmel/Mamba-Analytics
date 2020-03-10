@@ -9,7 +9,7 @@ TITLES = [
         ["winner", "agreement", "loser", "lead"]),
     ("{} down{}{}",
         ["winner", "agreement", "loser"]),
-    ("{} secure{} the W against {} by a score of {}",
+    ("{} secure{}the W against {} by a score of {}",
         ["winner", "agreement", "loser", "score"]),
     ("{} fall{}to {}",
         ["loser", "agreement", "winner"]),
@@ -124,9 +124,9 @@ def generate_title_text(game_object):
                 list_to_paste.append(str(game_object.df.tail(1).away_score.iloc[0]) + "-" + str(game_object.df.tail(1).home_score.iloc[0]))
         if i == "agreement":
             if cities_or_nicknames == "cities":
-                agreement = "s "
+                list_to_paste.append("s ")
             else:
-                agreement = " "
+                list_to_paste.append(" ")
 
     if len(list_to_paste) == 2:
         return selected_title[0][0].format(list_to_paste[0], list_to_paste[1])
