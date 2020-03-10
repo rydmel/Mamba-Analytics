@@ -71,19 +71,14 @@ def generate_recap_text(game_object):
     selected_play_numbers = select_momentum_shifting_plays(game_object)
 
     title_text = generate_title_text(game_object)
-
     odds_text = generate_odds_text(game_object)
-
     plays_text = ""
     for i in selected_play_numbers:
         play_text = generate_text_for_a_play(i, game_object)
         if play_text:
             plays_text += play_text
-
     timeouts_text = generate_timeouts_text(game_object)
-
     shot_selection_text = generate_shot_selection_text(game_object)
-    
     
     return title_text, odds_text, plays_text, timeouts_text, shot_selection_text
 
@@ -355,7 +350,7 @@ def generate_odds_text(game_object):
     game_object.get_odds_info()
 
     if game_object.line:
-        odds_text = "Line Result: "
+        odds_text = "Spread Result: "
         spread = float(game_object.line[-5:].strip(" "))
         if "EVEN" in game_object.line:
             if game_object.df.tail(1).away_score.iloc[0] > game_object.df.tail(1).home_score.iloc[0]:
