@@ -96,6 +96,7 @@ def home(request):
 				info['odds_text'] = info['recap_text'][1]
 				info['plays_text'] = info['recap_text'][2]
 				info['timeouts_text'] = info['recap_text'][3]
+				info['shot_selections_text'] = info['recap_text'][4]
 
 	info['schedule_form'] = form
 	info['game_form2'] = form2

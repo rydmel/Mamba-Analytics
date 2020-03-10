@@ -71,22 +71,22 @@
         </div>
         <div>
         <p class="recap_text">Recap:</p>
-        <h1>{{ title_text}}</h1>
-        <br>
-        
-
-        </br>
+        <h1>{{ title_text }}</h1>
         <p>{{ odds_text}}</p>
-        <br>
-        
-
-        </br>
         <p>{{ plays_text }}</p>
-        <br>
-        
-
-        </br>
         <p>{{ timeouts_text }}</p>
+
+        <table class="courses">
+            <tr>
+                <th>Players</th>
+            </tr>
+            {% for player in shot_selections_text %}
+            <tr>
+                <td>{{ player }}</td>
+            </tr>
+            {% endfor %}
+
+                </table>
         </div>
     </body>
 

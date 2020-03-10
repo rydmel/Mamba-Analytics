@@ -81,9 +81,11 @@ def generate_recap_text(game_object):
             plays_text += play_text
 
     timeouts_text = generate_timeouts_text(game_object)
+
+    shot_selection_text = generate_shot_selection_text(game_object)
     
     
-    return title_text, odds_text, plays_text, timeouts_text
+    return title_text, odds_text, plays_text, timeouts_text, shot_selection_text
 
 
 def generate_title_text(game_object):
@@ -388,6 +390,23 @@ def generate_odds_text(game_object):
 
     return odds_text
 
+
+def generate_shot_selection_text(game_object):
+    game_object.get_player_dict()
+
+    selection_string = []
+    for player, selections in game_object.shot_selection_dict.items():
+        player_string = player + " had..."
+        for types, counts in selections.items():
+            player_string += str(counts) + " " + types
+            if counts > 1:
+                player_string += "s..."
+            else:
+                player_string += "..."
+        player_string += ";"
+        selection_string.append(player_string)
+
+    return selection_string
 
 def extract_team_city(team_name_string):
     team_name_split = team_name_string.split(" ")
