@@ -49,7 +49,11 @@ PHASE_CHOICES = (("Preseason", "Preseason"),
 	("Regular Season", "Regular Season"),
 	("Postseason", "Postseason"))
 
+
 class ScheduleEntry(forms.Form):
+	'''
+	A forms class for the dropdown menus for selecting a team schedule
+	'''
 
 	team = forms.ChoiceField(
 		label = "Full team name",
@@ -68,16 +72,25 @@ class ScheduleEntry(forms.Form):
 
 
 class GameEntry(forms.Form):
+	'''
+	A forms class for entering a game ID
+	'''
 	game_id = forms.IntegerField(
 		label = "Game ID",
 		help_text= "Example: 401161524",
 		required = False)
 
 
-
-
-
 def home(request):
+	'''
+	Home page functionality
+
+	Inputs:
+		request: Generated through website user interface
+
+	Outputs:
+		render request for website user interface output
+	'''
 	info = {}
 	if request.method == 'GET':
 		form = ScheduleEntry(request.GET)
