@@ -54,19 +54,16 @@ class ScheduleEntry(forms.Form):
 	team = forms.ChoiceField(
 		label = "Full team name",
 		choices = TEAM_CHOICES,
-		help_text= "Example: Boston Celtics",
 		required = False)
 
 	season = forms.ChoiceField(
 		label = "Season Years",
 		choices = YEAR_CHOICES,
-		help_text= "Example: 2019-2020",
 		required = False)
 
 	season_phase = forms.ChoiceField(
 		label = "Season Phase",
 		choices = PHASE_CHOICES,
-		help_text= 'One of "Regular Season", "Preseason", "Postseason"',
 		required = False)
 
 
