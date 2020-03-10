@@ -21,7 +21,34 @@
         <div class= "frame">
         <form method="get">
             <table class="address">
-                {{ game_form }}
+                {{ schedule_form }}
+            </table>
+                <input type="submit" value="Submit" />
+        </form>
+        </div>
+        <div class="frame">
+            {% if rows != None %}
+            <div class="results">
+                <table class="courses">
+                    <tr>
+                        {% for col in columns %}
+                        <th>{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                    {% for entry in rows %}
+                    <tr>
+                        {% for col in entry %}
+                        <td>{{ col }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+            </div>
+        <div class= "frame">
+        <form method="get">
+            <table class="address">
+                {{ game_form2 }}
             </table>
                 <input type="submit" value="Submit" />
         </form>
