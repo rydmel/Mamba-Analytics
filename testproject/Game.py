@@ -49,14 +49,17 @@ class Game:
         
 
     def parse_revised_text(self, s): 
-        for x in l: 
+        for x in ['makes', 'misses', '( assists)']: 
             s = s.replace(x, '') 
         s = s.lstrip() 
         s = s.strip() 
         return s
 
     def get_player_dict(self):
-        for i in range(len(self.revised_play_list)): 
+        self.shot_selection_dict = {}
+        for i in range(len(self.revised_play_list)):
+            play = self.revised_play_list[i]
             if play[0] == 'm': 
-                 if 'free' not in play: 
-                     parse_revised_text(play)
+                 if 'free' not in play:
+                    self.shot_selection_dict[self.players_list[i][0]] = self.shot_selection_dict.get(self.players_list[i][0], {})
+                    self.shot_selection_dict[self.players_list[i][0]][self.parse_revised_text(play)] = self.shot_selection_dict[self.players_list[i][0]].get(self.parse_revised_text(play), 0) + 1
