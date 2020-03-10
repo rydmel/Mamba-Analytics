@@ -258,7 +258,7 @@ def generate_text_for_a_play(selected_play_number, game_object):
                 else:
                     list_to_paste.append("Midway through")
             elif selected_play.quarter == 2 or selected_play.quarter == 4:
-                if selected_play.time.split(":") >= 5:
+                if int(selected_play.time.split(":")[0]) >= 5:
                     list_to_paste.append("Midway through")
                 else:
                     list_to_paste.append("Late in")
@@ -447,7 +447,6 @@ def generate_odds_text(game_object):
                 odds_text += extract_team_nickname(game_object.home_team) + \
                 " cover as underdogs.  "
       
-
         odds_text += "Over/Under Result: "
         if game_object.over_under == game_object.df.tail(1).away_score.\
         iloc[0] + game_object.df.tail(1).home_score.iloc[0]:
