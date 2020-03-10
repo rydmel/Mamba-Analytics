@@ -297,8 +297,6 @@ def generate_text_for_a_play(selected_play_number, game_object):
         elif i == "seconds":
             list_to_paste.append(selected_play.time.split(":")[1])
 
-    print(selected_sentence)
-    print(list_to_paste)
     if len(list_to_paste) == 2:
         return selected_sentence[0][0].format(list_to_paste[0], list_to_paste[1])
     elif len(list_to_paste) == 3:
