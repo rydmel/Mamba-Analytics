@@ -10,8 +10,13 @@
         <p>
             This project is designed to analyze play-by-play data from NBA games
         </p>
+        <br>
+        
 
+        </br>
 
+        <h3>Team Schedule Lookup</h3>
+        <p>All fields required</p>
         <font color='red'>
             <strong> {{ game_id }} </strong>
         </font>
@@ -45,7 +50,18 @@
                 </table>
             {% endif %}
             </div>
+
         <div class= "frame">
+        <br>
+        
+
+        </br>
+        <br>
+        
+
+        </br>
+
+        <h3>Game Recap Search</h3>
         <form method="get">
             <table class="address">
                 {{ game_form2 }}
@@ -53,7 +69,25 @@
                 <input type="submit" value="Submit" />
         </form>
         </div>
-        <p class="recap_text">Results: {{ recap_text }}</p>
+        <div>
+        <p class="recap_text">Recap:</p>
+        <h1>{{ title_text}}</h1>
+        <br>
+        
+
+        </br>
+        <p>{{ odds_text}}</p>
+        <br>
+        
+
+        </br>
+        <p>{{ plays_text }}</p>
+        <br>
+        
+
+        </br>
+        <p>{{ timeouts_text }}</p>
+        </div>
     </body>
-    <img src=  "https://www.multichannel.com/.image/t_share/MTU0MDYzNjQ2NTk2MzQyODY2/espn-logojpg.jpg", width=300, style="float:bottom">
+
 </html>

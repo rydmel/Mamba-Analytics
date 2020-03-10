@@ -92,7 +92,10 @@ def home(request):
 			if form2.cleaned_data['game_id']:
 				game = Game.Game(str(form2.cleaned_data['game_id']))
 				info['recap_text'] = recap.generate_recap_text(game)
-
+				info['title_text'] = info['recap_text'][0]
+				info['odds_text'] = info['recap_text'][1]
+				info['plays_text'] = info['recap_text'][2]
+				info['timeouts_text'] = info['recap_text'][3]
 
 	info['schedule_form'] = form
 	info['game_form2'] = form2
