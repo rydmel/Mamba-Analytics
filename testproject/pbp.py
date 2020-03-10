@@ -119,7 +119,7 @@ def calculate_momentum(pbp_dataframe):
         else:
             if five_minutes_ago >= 12:
                 if play[1]["quarter"] == 1:
-                    momentum_list.append(((play[1]["datetime"].minute * 60 + play[1]["datetime"].second) / 300) * determine_momentum(play[1]["away_score"], play[1]["home_score"]))
+                    momentum_list.append(0.0)
                 else:
                     play_five_minutes_ago = pbp_dataframe[(pbp_dataframe["quarter"] == (play[1]["quarter"] - 1)) &
                                                           (pbp_dataframe["datetime"].dt.minute <= five_minutes_ago - 12) &

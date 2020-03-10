@@ -21,15 +21,18 @@ TITLES = [
         ["loser", "winner"])
 ]
 
-
 MISSED_SHOT_SENTENCES = [
-    ("A fruitless {}-point attempt by {} in the {} did his team no favors, causing the {} to gain more momentum.  ",
+    ("A fruitless {}-point attempt by {} in the {} did his team no favors, \
+        causing the {} to gain more momentum.  ",
         ["points", "player", "quarter", "opposing_team_nickname"]),
-    ("A missed shot by {} with {} to go in the {} helped to further fuel a scoring run by {}.  ",
+    ("A missed shot by {} with {} to go in the {} helped to further fuel a \
+        scoring run by {}.  ",
         ["player", "minutes", "quarter", "opposing_team_city"]),
-    ("With {} minutes left in the {}, {}'s missed {}-point shot, led to a signifiant loss in momentum for {}.  ",
+    ("With {} minutes left in the {}, {}'s missed {}-point shot, led to a \
+        signifiant loss in momentum for {}.  ",
         ["minutes", "quarter", "player", "points", "player_team_city"]),
-    ("A {}-point shot attempt by {} in the {} led to zero points and a significant swing in momentum in his opponents' favor.  ",
+    ("A {}-point shot attempt by {} in the {} led to zero points and a \
+        significant swing in momentum in his opponents' favor.  ",
         ["points", "player", "quarter"]),
     ("Unable to hit from {} the arc, a {} shot in the {} fueled a run by {}.  ",
         ["inside_or_outside", "player", "quarter", "opposing_team_city"])]
@@ -39,31 +42,41 @@ MADE_SHOT_SENTENCES = [
         ["quarter", "player", "points", "score"]),
     ("{} the {}, a {} shot for {} points swung the momentum in {}'s favor.  ",
         ["relative_time", "half", "player", "points", "player_team_city"]),
-    ("A made {} point shot by {} with {} minutes left in the {} went down as one of the most impactful plays on the flow of the game.  ",
+    ("A made {} point shot by {} with {} minutes left in the {} went down as \
+        one of the most impactful plays on the flow of the game.  ",
         ["points", "player", "minutes", "quarter"]),
-    ("{} had a timely made bucket with {} minutes to go in the {}, which {}{} points.  ",
+    ("{} had a timely made bucket with {} minutes to go in the {}, which {}{} \
+        points.  ",
         ["player", "minutes", "quarter", "lead_increase_or_decrease", "lead"]),
-    ("With {} minutes to go in the {}, a shot made by {}, good for {} points, greatly helped to build momentum for his team.  ",
+    ("With {} minutes to go in the {}, a shot made by {}, good for {} points, \
+        greatly helped to build momentum for his team.  ",
         ["minutes", "quarter", "player", "points"])
 ]
 
 REBOUND_SENTENCES = [
-    ("While perhaps unbeknownst to him at the time ({} to go in the {}), {}'s successful attempt to secure a failed shot from {} was game_altering.  ",
+    ("While perhaps unbeknownst to him at the time ({} to go in the {}), {}'s \
+        successful attempt to secure a failed shot from {} was game_altering.  ",
         ["minutes", "quarter", "player", "shooter"]),
-    ("After an ill-fated shot attempt from {}, {} secured the rebound for the {} and the additional momentum that went with it.  ",
+    ("After an ill-fated shot attempt from {}, {} secured the rebound for the \
+        {} and the additional momentum that went with it.  ",
         ["shooter", "player", "player_team_nickname"]),
     ("With {} to go in the {}, {} tallied a rebound off a {} shot.  ",
         ["minutes", "quarter", "player", "shooter"]),
-    ("A succesful rebound by {} in the {} had significant impact on the game's flow.  ",
+    ("A succesful rebound by {} in the {} had significant impact on the game's\
+     flow.  ",
         ["player", "half"]),
-    ("{} rebound by {} with {} minutes and {} seconds to go in the {} swung the momentum in his team's favor.  ",
+    ("{} rebound by {} with {} minutes and {} seconds to go in the {} swung \
+        the momentum in his team's favor.  ",
         ["offensive_or_defensive", "player", "minutes", "seconds", "quarter"])
 ]
 
 TIMEOUTS_SENTENCES = [
-    "'s head coach called timeouts when, on average, momentum was {} his team's favor.",
-    "'s head coach opted to use his timeouts when momentum was {} the favor of his team, on average.",
-    "'s coach was particularly inclined to call timeouts while momentum was {} his team's favor."
+    "'s head coach called timeouts when, on average, momentum was {} his \
+    team's favor.",
+    "'s head coach opted to use his timeouts when momentum was {} the favor of \
+    his team, on average.",
+    "'s coach was particularly inclined to call timeouts while momentum was {}\
+     his team's favor."
 ]
 
 def generate_recap_text(game_object):
@@ -80,7 +93,8 @@ def generate_recap_text(game_object):
     timeouts_text = generate_timeouts_text(game_object)
     shot_selection_text = generate_shot_selection_text(game_object)
     
-    return title_text, odds_text, plays_text, timeouts_text, shot_selection_text
+    return title_text, odds_text, plays_text, timeouts_text,\
+        shot_selection_text
 
 
 def generate_title_text(game_object):
@@ -91,37 +105,55 @@ def generate_title_text(game_object):
     list_to_paste = []
     for i in selected_title[0][1]:
         if i == "winner":
-            if game_object.df.tail(1).home_score.iloc[0] > game_object.df.tail(1).away_score.iloc[0]:
+            if game_object.df.tail(1).home_score.iloc[0] > game_object.df.\
+            tail(1).away_score.iloc[0]:
                 if cities_or_nicknames == "cities":
-                    list_to_paste.append(extract_team_city(game_object.home_team))
+                    list_to_paste.append(extract_team_city(
+                        game_object.home_team))
                 else:
-                    list_to_paste.append(extract_team_nickname(game_object.home_team))
+                    list_to_paste.append(extract_team_nickname(
+                        game_object.home_team))
             else:
                 if cities_or_nicknames == "cities":
-                    list_to_paste.append(extract_team_city(game_object.away_team))
+                    list_to_paste.append(extract_team_city(
+                        game_object.away_team))
                 else:
-                    list_to_paste.append(extract_team_nickname(game_object.away_team))
+                    list_to_paste.append(extract_team_nickname(
+                        game_object.away_team))
         if i == "loser":
-            if game_object.df.tail(1).home_score.iloc[0] > game_object.df.tail(1).away_score.iloc[0]:
+            if game_object.df.tail(1).home_score.iloc[0] > game_object.df.\
+            tail(1).away_score.iloc[0]:
                 if cities_or_nicknames == "cities":
-                    list_to_paste.append(extract_team_city(game_object.away_team))
+                    list_to_paste.append(extract_team_city(
+                        game_object.away_team))
                 else:
-                    list_to_paste.append(extract_team_nickname(game_object.away_team))
+                    list_to_paste.append(extract_team_nickname(
+                        game_object.away_team))
             else:
                 if cities_or_nicknames == "cities":
-                    list_to_paste.append(extract_team_city(game_object.home_team))
+                    list_to_paste.append(extract_team_city(
+                        game_object.home_team))
                 else:
-                    list_to_paste.append(extract_team_nickname(game_object.home_team))
+                    list_to_paste.append(extract_team_nickname(
+                        game_object.home_team))
         if i == "lead":
-            if game_object.df.tail(1).home_score.iloc[0] > game_object.df.tail(1).away_score.iloc[0]:
-                list_to_paste.append(game_object.df.tail(1).home_score.iloc[0] - game_object.df.tail(1).away_score.iloc[0])
+            if game_object.df.tail(1).home_score.iloc[0] > game_object.df.\
+            tail(1).away_score.iloc[0]:
+                list_to_paste.append(game_object.df.tail(1).home_score.\
+                    iloc[0] - game_object.df.tail(1).away_score.iloc[0])
             else:
-                list_to_paste.append(game_object.df.tail(1).away_score.iloc[0] - game_object.df.tail(1).home_score.iloc[0])
+                list_to_paste.append(game_object.df.tail(1).away_score.\
+                    iloc[0] - game_object.df.tail(1).home_score.iloc[0])
         if i == "score":
-            if game_object.df.tail(1).home_score.iloc[0] > game_object.df.tail(1).away_score.iloc[0]:
-                list_to_paste.append(str(game_object.df.tail(1).home_score.iloc[0]) + "-" + str(game_object.df.tail(1).away_score.iloc[0]))
+            if game_object.df.tail(1).home_score.iloc[0] > game_object.df.\
+            tail(1).away_score.iloc[0]:
+                list_to_paste.append(str(game_object.df.tail(1).home_score\
+                    .iloc[0]) + "-" + str(game_object.df.tail(1).away_score\
+                    .iloc[0]))
             else:
-                list_to_paste.append(str(game_object.df.tail(1).away_score.iloc[0]) + "-" + str(game_object.df.tail(1).home_score.iloc[0]))
+                list_to_paste.append(str(game_object.df.tail(1).away_score.\
+                    iloc[0]) + "-" + str(game_object.df.tail(1).home_score.\
+                    iloc[0]))
         if i == "agreement":
             if cities_or_nicknames == "cities":
                 list_to_paste.append("s ")
@@ -131,10 +163,11 @@ def generate_title_text(game_object):
     if len(list_to_paste) == 2:
         return selected_title[0][0].format(list_to_paste[0], list_to_paste[1])
     elif len(list_to_paste) == 3:
-        return selected_title[0][0].format(list_to_paste[0], list_to_paste[1], list_to_paste[2])
+        return selected_title[0][0].format(list_to_paste[0], list_to_paste[1], 
+            list_to_paste[2])
     else:
-        return selected_title[0][0].format(list_to_paste[0], list_to_paste[1], list_to_paste[2], list_to_paste[3])
-
+        return selected_title[0][0].format(list_to_paste[0], list_to_paste[1], 
+            list_to_paste[2], list_to_paste[3])
 
 
 def select_momentum_shifting_plays(game_object):
@@ -147,17 +180,18 @@ def select_momentum_shifting_plays(game_object):
         if row[0] == 0:
             momentum_difference.append(0)
         else:
-            momentum_difference.append(abs(game_object.momentum_df.iloc[row[0]].momentum -
-                                           game_object.momentum_df.iloc[row[0] - 1].momentum))
+            momentum_difference.append(abs(
+                game_object.momentum_df.iloc[row[0]].momentum -
+                game_object.momentum_df.iloc[row[0] - 1].momentum))
 
     momentum_df_copy["momentum_delta"] = momentum_difference
-    momentum_df_sorted = momentum_df_copy.sort_values(by = "momentum_delta", ascending = False)
-
+    momentum_df_sorted = momentum_df_copy.sort_values(by = "momentum_delta", 
+                                                      ascending = False)
     top_five_plays = momentum_df_sorted.head(5).sort_index()
-
     selected_play_numbers = []
     for row in top_five_plays.iterrows():
-        if row[0] + 1 in selected_play_numbers or row[0] - 1 in selected_play_numbers:
+        if row[0] + 1 in selected_play_numbers or row[0] - 1 in \
+        selected_play_numbers:
             pass
         else:
             selected_play_numbers.append(row[0])
@@ -202,7 +236,8 @@ def generate_text_for_a_play(selected_play_number, game_object):
             elif selected_play.quarter == 7:
                 list_to_paste.append("3rd overtime period")
             else:
-                list_to_paste.append(str(selected_play.quarter) + "th overtime period")
+                list_to_paste.append(str(selected_play.quarter) + \
+                    "th overtime period")
         elif i == "player":
             list_to_paste.append(pbp.get_players(selected_play.description)[0])
         elif i == "points":
@@ -233,11 +268,14 @@ def generate_text_for_a_play(selected_play_number, game_object):
             elif selected_play.quarter == 3 or selected_play.quarter == 4:
                 list_to_paste.append("2nd")
         elif i == "player_team_city":
-            list_to_paste.append(extract_team_city(schedule.TEAM_CODES_TO_NAMES[selected_play.team]))
+            list_to_paste.append(extract_team_city(schedule.TEAM_CODES_TO_NAMES[
+                selected_play.team]))
         elif i == "minutes":
             time_values_list = selected_play.time.split(":")
-            if (len(time_values_list[1]) > 4 & int(time_values_list[1][0]) > 2) or int(time_values_list[0]) == 0:
-                list_to_paste.append(str(int(selected_play.time.split(":")[0]) + 1))
+            if (len(time_values_list[1]) > 4 & int(time_values_list[1][0]) > 2) \
+            or int(time_values_list[0]) == 0:
+                list_to_paste.append(str(int(
+                    selected_play.time.split(":")[0]) + 1))
             else:
                 list_to_paste.append(str(int(selected_play.time.split(":")[0])))
         elif i == "lead_increase_or_decrease":
@@ -258,23 +296,29 @@ def generate_text_for_a_play(selected_play_number, game_object):
         elif i == "lead":
             if selected_play.team + ".png" in game_object.home_logo:
                 if selected_play.home_score > selected_play.away_score:
-                    list_to_paste.append(str(selected_play.home_score - selected_play.away_score))
+                    list_to_paste.append(str(selected_play.home_score - 
+                        selected_play.away_score))
                 elif selected_play.home_score == selected_play.away_score:
                     list_to_paste.append(str(selected_play.home_score))
                 else:
-                    list_to_paste.append(str(selected_play.away_score - selected_play.home_score))
+                    list_to_paste.append(str(selected_play.away_score - 
+                        selected_play.home_score))
             else:
                 if selected_play.home_score < selected_play.away_score:
-                    list_to_paste.append(str(selected_play.away_score - selected_play.home_score))
+                    list_to_paste.append(str(selected_play.away_score - 
+                        selected_play.home_score))
                 elif selected_play.home_score == selected_play.away_score:
                     list_to_paste.append(selected_play.away_score)
                 else:
-                    list_to_paste.append(str(selected_play.home_score - selected_play.away_score))
+                    list_to_paste.append(str(selected_play.home_score - 
+                        selected_play.away_score))
         elif i == "opposing_team_nickname":
             if selected_play.team + ".png" in game_object.home_logo:
-                list_to_paste.append(extract_team_nickname(game_object.away_team))
+                list_to_paste.append(extract_team_nickname(
+                    game_object.away_team))
             else:
-                list_to_paste.append(extract_team_nickname(game_object.home_team))
+                list_to_paste.append(extract_team_nickname(
+                    game_object.home_team))
         elif i == "opposing_team_city":
             if selected_play.team + ".png" in game_object.home_logo:
                 list_to_paste.append(extract_team_city(game_object.home_team))
@@ -286,9 +330,11 @@ def generate_text_for_a_play(selected_play_number, game_object):
             else:
                 list_to_paste.append("inside")
         elif i == "shooter":
-            list_to_paste.append(pbp.get_players(game_object.momentum_df.iloc[selected_play_number - 1].description)[0])
+            list_to_paste.append(pbp.get_players(game_object.momentum_df.iloc\
+                [selected_play_number - 1].description)[0])
         elif i == "player_team_nickname":
-            list_to_paste.append(extract_team_nickname(schedule.TEAM_CODES_TO_NAMES[selected_play.team]))
+            list_to_paste.append(extract_team_nickname(schedule.\
+                TEAM_CODES_TO_NAMES[selected_play.team]))
         elif i == "offensive_or_defensive":
             if "offensive" in selected_play.description:
                 list_to_paste.append("An offensive")
@@ -298,36 +344,49 @@ def generate_text_for_a_play(selected_play_number, game_object):
             list_to_paste.append(selected_play.time.split(":")[1])
 
     if len(list_to_paste) == 2:
-        return selected_sentence[0][0].format(list_to_paste[0], list_to_paste[1])
+        return selected_sentence[0][0].format(list_to_paste[0], 
+                                              list_to_paste[1])
     elif len(list_to_paste) == 3:
-        return selected_sentence[0][0].format(list_to_paste[0], list_to_paste[1], list_to_paste[2])
+        return selected_sentence[0][0].format(list_to_paste[0], 
+            list_to_paste[1], list_to_paste[2])
     elif len(list_to_paste) == 4:
-        return selected_sentence[0][0].format(list_to_paste[0], list_to_paste[1], list_to_paste[2], list_to_paste[3])
+        return selected_sentence[0][0].format(list_to_paste[0], 
+            list_to_paste[1], list_to_paste[2], list_to_paste[3])
     elif len(list_to_paste) == 5:
-        return selected_sentence[0][0].format(list_to_paste[0], list_to_paste[1], list_to_paste[2], list_to_paste[3], list_to_paste[4])
+        return selected_sentence[0][0].format(list_to_paste[0], 
+            list_to_paste[1], list_to_paste[2], list_to_paste[3], 
+            list_to_paste[4])
     elif len(list_to_paste) == 6:
-        return selected_sentence[0][0].format(list_to_paste[0], list_to_paste[1], list_to_paste[2], list_to_paste[3], list_to_paste[4], list_to_paste[5])
+        return selected_sentence[0][0].format(list_to_paste[0], 
+            list_to_paste[1], list_to_paste[2], list_to_paste[3], 
+            list_to_paste[4], list_to_paste[5])
 
 
 def generate_timeouts_text(game_object):
-    away_timeout_avg_momentum, home_timeout_avg_momentum = determine_timeouts_momentum(game_object)
+    away_timeout_avg_momentum, home_timeout_avg_momentum = \
+    determine_timeouts_momentum(game_object)
 
     timeouts_text = ""
     if away_timeout_avg_momentum >= 0:
-        timeouts_text += extract_team_city(game_object.away_team) + random.sample(TIMEOUTS_SENTENCES, 1)[0].format("not in") + "  "
+        timeouts_text += extract_team_city(game_object.away_team) + \
+        random.sample(TIMEOUTS_SENTENCES, 1)[0].format("not in") + "  "
     else:
-        timeouts_text += extract_team_city(game_object.away_team) + random.sample(TIMEOUTS_SENTENCES, 1)[0].format("in") + "  "
+        timeouts_text += extract_team_city(game_object.away_team) + \
+        random.sample(TIMEOUTS_SENTENCES, 1)[0].format("in") + "  "
     if home_timeout_avg_momentum <= 0:
-        timeouts_text += extract_team_city(game_object.home_team) + random.sample(TIMEOUTS_SENTENCES, 1)[0].format("not in")
+        timeouts_text += extract_team_city(game_object.home_team) + \
+        random.sample(TIMEOUTS_SENTENCES, 1)[0].format("not in")
     else:
-        timeouts_text += extract_team_city(game_object.home_team) + random.sample(TIMEOUTS_SENTENCES, 1)[0].format("in")
+        timeouts_text += extract_team_city(game_object.home_team) + \
+        random.sample(TIMEOUTS_SENTENCES, 1)[0].format("in")
 
     return timeouts_text
 
 
 def determine_timeouts_momentum(game_object):
 
-    timeouts = game_object.momentum_df[game_object.momentum_df["description"].str.find("timeout") != -1]
+    timeouts = game_object.momentum_df[game_object.momentum_df["description"]\
+    .str.find("timeout") != -1]
     away_team_timeouts_counter = 0
     away_team_cummulative_momentum = 0.0
     home_team_timeouts_counter = 0
@@ -350,6 +409,7 @@ def determine_timeouts_momentum(game_object):
         return (away_team_cummulative_momentum / away_team_timeouts_counter,
                 home_team_cummulative_momentum / home_team_timeouts_counter)
 
+
 def generate_odds_text(game_object):
     game_object.get_odds_info()
 
@@ -357,30 +417,43 @@ def generate_odds_text(game_object):
         odds_text = "Spread Result: "
         spread = float(game_object.line[-5:].strip(" "))
         if "EVEN" in game_object.line:
-            if game_object.df.tail(1).away_score.iloc[0] > game_object.df.tail(1).home_score.iloc[0]:
-                odds_text += extract_team_nickname(game_object.home_team) + " win pick'em.  "
+            if game_object.df.tail(1).away_score.iloc[0] > game_object.df.\
+            tail(1).home_score.iloc[0]:
+                odds_text += extract_team_nickname(game_object.home_team) + \
+                " win pick'em.  "
             else:
-                odds_text += extract_team_nickname(game_object.away_team) + " win pick'em. "
+                odds_text += extract_team_nickname(game_object.away_team) + \
+                " win pick'em. "
         elif game_object.line[:3].strip(" ") + ".png" in game_object.home_logo:
-            if game_object.df.tail(1).away_score.iloc[0] == game_object.df.tail(1).home_score.iloc[0] - spread:
+            if game_object.df.tail(1).away_score.iloc[0] == game_object.df.\
+            tail(1).home_score.iloc[0] - spread:
                 odds_text += "PUSH.  "
-            elif game_object.df.tail(1).away_score.iloc[0] > game_object.df.tail(1).home_score.iloc[0] - spread:
-                odds_text += extract_team_nickname(game_object.away_team) + " cover as underdogs.  "
+            elif game_object.df.tail(1).away_score.iloc[0] > game_object.df.\
+            tail(1).home_score.iloc[0] - spread:
+                odds_text += extract_team_nickname(game_object.away_team) + \
+                " cover as underdogs.  "
             else:
-                odds_text += extract_team_nickname(game_object.home_team) + " cover as favorites.  "
+                odds_text += extract_team_nickname(game_object.home_team) + \
+                " cover as favorites.  "
         else:
-            if game_object.df.tail(1).away_score.iloc[0] - spread == game_object.df.tail(1).home_score.iloc[0]:
+            if game_object.df.tail(1).away_score.iloc[0] - spread == \
+            game_object.df.tail(1).home_score.iloc[0]:
                 odds_text += "PUSH.  "
-            elif game_object.df.tail(1).away_score.iloc[0] - spread > game_object.df.tail(1).home_score.iloc[0]:
-                odds_text += extract_team_nickname(game_object.away_team) + " cover as favorites.  "
+            elif game_object.df.tail(1).away_score.iloc[0] - spread > \
+            game_object.df.tail(1).home_score.iloc[0]:
+                odds_text += extract_team_nickname(game_object.away_team) + \
+                " cover as favorites.  "
             else:
-                odds_text += extract_team_nickname(game_object.home_team) + " cover as underdogs.  "
+                odds_text += extract_team_nickname(game_object.home_team) + \
+                " cover as underdogs.  "
       
 
         odds_text += "Over/Under Result: "
-        if game_object.over_under == game_object.df.tail(1).away_score.iloc[0] + game_object.df.tail(1).home_score.iloc[0]:
+        if game_object.over_under == game_object.df.tail(1).away_score.\
+        iloc[0] + game_object.df.tail(1).home_score.iloc[0]:
             odds_text += "PUSH."
-        elif game_object.over_under >= game_object.df.tail(1).away_score.iloc[0] + game_object.df.tail(1).home_score.iloc[0]:
+        elif game_object.over_under >= game_object.df.tail(1).away_score.\
+        iloc[0] + game_object.df.tail(1).home_score.iloc[0]:
             odds_text += "UNDER."
         else:
             odds_text += "OVER."
@@ -406,6 +479,7 @@ def generate_shot_selection_text(game_object):
 
     return selection_string
 
+
 def extract_team_city(team_name_string):
     team_name_split = team_name_string.split(" ")
     if len(team_name_split) > 2:
@@ -423,5 +497,3 @@ def extract_team_nickname(team_name_string):
         return team_name_split[1] + " " + team_name_split[2]
     else:
         return team_name_split[-1]
-
-
