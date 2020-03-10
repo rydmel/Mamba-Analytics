@@ -7,13 +7,13 @@ import random
 TITLES = [
     ("{} beat {} by {}",
         ["winner", "loser", "lead"]),
-    ("{} downs {}",
+    ("{} down {}",
         ["winner", "loser"]),
-    ("{} secures the W against {} by a score of {}",
+    ("{} secure the W against {} by a score of {}",
         ["winner", "loser", "score"]),
-    ("{} falls to {}",
+    ("{} fall to {}",
         ["loser", "winner"]),
-    ("{} triumphs over {} by {} points",
+    ("{} triumph over {} by {} points",
         ["winner", "loser", "lead"]),
     ("{} unable to stop {} in their latest battle",
         ["loser", "winner"]),
@@ -392,7 +392,10 @@ def generate_odds_text(game_object):
 def extract_team_city(team_name_string):
     team_name_split = team_name_string.split(" ")
     if len(team_name_split) > 2:
-        return team_name_split[0] + " " + team_name_split[1]
+        if team_name_split[0] == "Portland":
+            return "Portland"
+        else:
+            return team_name_split[0] + " " + team_name_split[1]
     else:
         return team_name_split[0]
 
