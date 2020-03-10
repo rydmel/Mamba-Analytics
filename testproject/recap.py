@@ -403,7 +403,6 @@ def generate_shot_selection_text(game_object):
                 player_string += "s..."
             else:
                 player_string += "..."
-        player_string += ";"
         selection_string.append(player_string)
 
     return selection_string
