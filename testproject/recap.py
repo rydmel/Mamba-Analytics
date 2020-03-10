@@ -79,7 +79,28 @@ TIMEOUTS_SENTENCES = [
      his team's favor."
 ]
 
+
 def generate_recap_text(game_object):
+    '''
+    Generate recap text for an NBA game
+
+    Inputs:
+        game_object: (Game Class object) an object representing NBA game an
+          NBA game
+
+    Outputs:
+        title_text: (str) a randomly generated news article-like title for the
+          game in question
+        odds_text: (str) a report on the result of the spread and over/under 
+          for the game in question
+        plays_text: (str) a description of the plays of the game in question 
+          which impacted "momentum" most greatly
+        timeouts_text: (str) two sentences to describe whether each team used
+           its timeouts when the momentum was or was not in their favor, on
+           average during the game in question
+        shot_selection_text: (list of str) an accounting of the type of shots
+          (asreported by ESPN) taken by players in the game in question
+    '''
 
     selected_play_numbers = select_momentum_shifting_plays(game_object)
 
@@ -98,6 +119,19 @@ def generate_recap_text(game_object):
 
 
 def generate_title_text(game_object):
+    '''
+    Generate a title for an NBA game's recap text
+
+    Inputs:
+        game_object: (Game Class object) an object representing NBA game an
+          NBA game
+
+    Outputs:
+        title_text: (str) a randomly generated news article-like title for the
+          game in question
+
+    '''
+
     cities_or_nicknames = random.sample(["cities", "nicknames"], 1)[0]
 
     selected_title = random.sample(TITLES, 1)
@@ -171,6 +205,19 @@ def generate_title_text(game_object):
 
 
 def select_momentum_shifting_plays(game_object):
+    '''
+    Select, at most, the top 5 plays in terms of resulting change in
+    momentum
+
+    Inputs:
+        game_object: (Game Class object) an object representing NBA game an
+          NBA game
+
+    Outputs:
+        selected_play_numbers: (list of int) a list of the momentum shifting
+          plays' indexes in the momentum dataframe
+    '''
+
     game_object.get_momentum_df()
 
     momentum_df_copy = game_object.momentum_df.copy()
@@ -190,6 +237,8 @@ def select_momentum_shifting_plays(game_object):
     top_five_plays = momentum_df_sorted.head(5).sort_index()
     selected_play_numbers = []
     for row in top_five_plays.iterrows():
+        # Avoid reporting "adjacent" plays (such as shot-rebound pairs from
+        # the same play sequence)
         if row[0] + 1 in selected_play_numbers or row[0] - 1 in \
         selected_play_numbers:
             pass
@@ -200,6 +249,21 @@ def select_momentum_shifting_plays(game_object):
 
 
 def generate_text_for_a_play(selected_play_number, game_object):
+    '''
+    Generate text descriptions of the biggest momentum shifting plays for
+    the game in question
+
+    Inputs:
+        selected_play_number: (int) the index number for the play for which
+          to produce a text description
+        game_object: (Game Class object) an object representing NBA game an
+          NBA game
+
+    Outputs:
+        plays_text: (str) a description of the plays of the game in question 
+          which impacted "momentum" most greatly
+    '''
+
     selected_play = game_object.momentum_df.iloc[selected_play_number]
     result = None
     if "misses" in selected_play.description:
@@ -363,6 +427,19 @@ def generate_text_for_a_play(selected_play_number, game_object):
 
 
 def generate_timeouts_text(game_object):
+        '''
+    Generate text about timeouts called for an NBA game
+
+    Inputs:
+        game_object: (Game Class object) an object representing NBA game an
+          NBA game
+
+    Outputs:
+        timeouts_text: (str) two sentences to describe whether each team used
+           its timeouts when the momentum was or was not in their favor, on
+           average during the game in question
+    '''
+
     away_timeout_avg_momentum, home_timeout_avg_momentum = \
     determine_timeouts_momentum(game_object)
 
@@ -384,6 +461,18 @@ def generate_timeouts_text(game_object):
 
 
 def determine_timeouts_momentum(game_object):
+    '''
+    Determine which team was favored by momentum, on average, during both
+    teams playing in NBA game's timeouts
+
+    Inputs:
+        game_object: (Game Class object) an object representing NBA game an
+          NBA game
+
+    Outputs:
+        (tuple of floats) The average momentum during the timeouts of the away
+          an home teams, respectively, of an NBA game
+    '''
 
     timeouts = game_object.momentum_df[game_object.momentum_df["description"]\
     .str.find("timeout") != -1]
@@ -411,6 +500,18 @@ def determine_timeouts_momentum(game_object):
 
 
 def generate_odds_text(game_object):
+    '''
+    Generate text describing the betting results of an NBA game
+
+    Inputs:
+        game_object: (Game Class object) an object representing NBA game an
+          NBA game
+
+    Outputs:
+        odds_text: (str) a report on the result of the spread and over/under 
+          for the game in question
+    '''
+
     game_object.get_odds_info()
 
     if game_object.line:
@@ -463,6 +564,18 @@ def generate_odds_text(game_object):
 
 
 def generate_shot_selection_text(game_object):
+    '''
+    Generate shot selection text for an NBA game
+
+    Inputs:
+        game_object: (Game Class object) an object representing NBA game an
+          NBA game
+
+    Outputs:
+        shot_selection_text: (list of str) an accounting of the type of shots
+          (asreported by ESPN) taken by players in the game in question
+    '''
+
     game_object.get_player_dict()
 
     selection_string = []
@@ -480,8 +593,21 @@ def generate_shot_selection_text(game_object):
 
 
 def extract_team_city(team_name_string):
+    '''
+    Extract the city/location moniker of an NBA team
+
+    Inputs:
+        team_name_string: (str) a string of an NBA team's full name
+
+    Outputs:
+        (str) the city/location moniker of an NBA team
+
+    '''
+
     team_name_split = team_name_string.split(" ")
     if len(team_name_split) > 2:
+        # Portland is the lone NBA franchise with a two worded "nickname"
+        # following Portland (Trail Blazers)
         if team_name_split[0] == "Portland":
             return "Portland"
         else:
@@ -491,6 +617,16 @@ def extract_team_city(team_name_string):
 
 
 def extract_team_nickname(team_name_string):
+    '''
+    Extract the nickname of an NBA team
+
+    Inputs:
+        team_name_string: (str) a string of an NBA team's full name
+
+    Outputs:
+        (str) the nickname of an NBA team (the name with no geographic label)
+    '''
+
     team_name_split = team_name_string.split(" ")
     if team_name_split[0] == "Portland":
         return team_name_split[1] + " " + team_name_split[2]
