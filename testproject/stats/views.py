@@ -36,10 +36,14 @@ TEAM_CHOICES = (('Atlanta Hawks', 'Atlanta Hawks'),
  ('Utah Jazz', 'Utah Jazz'),
  ('Washington Wizards', 'Washington Wizards'))
 
-
-
 YEAR_CHOICES = (("2019-2020", "2019-2020"),
-	("2018-2019", "2018-2019"))
+	("2018-2019", "2018-2019"),
+	("2017-2018", "2017-2018"),
+	("2016-2017", "2016-2017"),
+	("2015-2016", "2015-2016"),
+	("2014-2015", "2014-2015"),
+	("2013-2014", "2013-2014"),
+	("2012-2013", "2012-2013"))
 
 PHASE_CHOICES = (("Preseason", "Preseason"),
 	("Regular Season", "Regular Season"),
@@ -83,7 +87,9 @@ def home(request):
 		info['response'] = form
 		if form.is_valid():
 			if form.cleaned_data['season_phase']:
-				columns, rows = schedule.get_team_schedule(form.cleaned_data['team'], form.cleaned_data['season'], form.cleaned_data['season_phase'])
+				columns, rows = schedule.get_team_schedule(form.cleaned_data\
+					['team'], form.cleaned_data['season'], form.cleaned_data\
+					['season_phase'])
 				info['columns'] = columns
 				info['rows'] = rows
 

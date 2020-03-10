@@ -427,7 +427,7 @@ def generate_text_for_a_play(selected_play_number, game_object):
 
 
 def generate_timeouts_text(game_object):
-        '''
+    '''
     Generate text about timeouts called for an NBA game
 
     Inputs:
