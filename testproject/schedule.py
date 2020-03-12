@@ -160,6 +160,6 @@ def get_team_schedule(team_name, season, season_type):
                             results.append((date, opponent, game_id))
 
     except:
-        print("Invalid schedule")
+        return (['Date', 'Opponent', 'Game ID'], [("Schedule", "not", "accessible")])
 
     return (['Date', 'Opponent', 'Game ID'], results)
