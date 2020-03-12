@@ -134,6 +134,7 @@ def get_team_schedule(team_name, season, season_type):
     schedule_table = schedule_soup.find("tbody")
 
     results = []
+    
     try:
         for row in schedule_table.find_all("tr"):
             if (int(row["data-idx"]) > 0 and season_type_code != "3") \
@@ -157,7 +158,8 @@ def get_team_schedule(team_name, season, season_type):
                                     find("a")["href"][-9:]                                    
 
                             results.append((date, opponent, game_id))
-    except:
-         print("No schedule")
 
-    return (['Date', 'Opponent', 'Game ID'], [("Invalid", "schedule selection", "for selected team")])
+    except:
+        print("Invalid schedule")
+
+    return (['Date', 'Opponent', 'Game ID'], results)
