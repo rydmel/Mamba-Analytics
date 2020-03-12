@@ -28,7 +28,7 @@ MISSED_SHOT_SENTENCES = [
     ("A missed shot by {} with {} to go in the {} helped to further fuel a \
         scoring run by {}.  ",
         ["player", "minutes", "quarter", "opposing_team_city"]),
-    ("With {} minutes left in the {}, {}'s missed {}-point shot, led to a \
+    ("With {} left in the {}, {}'s missed {}-point shot, led to a \
         signifiant loss in momentum for {}.  ",
         ["minutes", "quarter", "player", "points", "player_team_city"]),
     ("A {}-point shot attempt by {} in the {} led to zero points and a \
@@ -42,13 +42,13 @@ MADE_SHOT_SENTENCES = [
         ["quarter", "player", "points", "score"]),
     ("{} the {}, a {} shot for {} points swung the momentum in {}'s favor.  ",
         ["relative_time", "half", "player", "points", "player_team_city"]),
-    ("A made {} point shot by {} with {} minutes left in the {} went down as \
+    ("A made {} point shot by {} with {} left in the {} went down as \
         one of the most impactful plays on the flow of the game.  ",
         ["points", "player", "minutes", "quarter"]),
-    ("{} had a timely made bucket with {} minutes to go in the {}, which {}{} \
+    ("{} had a timely made bucket with {} to go in the {}, which {}{} \
         points.  ",
         ["player", "minutes", "quarter", "lead_increase_or_decrease", "lead"]),
-    ("With {} minutes to go in the {}, a shot made by {}, good for {} points, \
+    ("With {} to go in the {}, a shot made by {}, good for {} points, \
         greatly helped to build momentum for his team.  ",
         ["minutes", "quarter", "player", "points"])
 ]
@@ -65,7 +65,7 @@ REBOUND_SENTENCES = [
     ("A succesful rebound by {} in the {} had significant impact on the game's\
      flow.  ",
         ["player", "half"]),
-    ("{} rebound by {} with {} minutes and {} seconds to go in the {} swung \
+    ("{} rebound by {} with {} and {} seconds to go in the {} swung \
         the momentum in his team's favor.  ",
         ["offensive_or_defensive", "player", "minutes", "seconds", "quarter"])
 ]
@@ -338,10 +338,19 @@ def generate_text_for_a_play(selected_play_number, game_object):
             time_values_list = selected_play.time.split(":")
             if (len(time_values_list[1]) > 4 & int(time_values_list[1][0]) > 2) \
             or int(time_values_list[0]) == 0:
-                list_to_paste.append(str(int(
-                    selected_play.time.split(":")[0]) + 1))
+                if int(selected_play.time.split(":")[0]) + 1 == 1:
+                    list_to_paste.append(str(int(
+                        selected_play.time.split(":")[0]) + 1) + "minute")
+                else:
+                   list_to_paste.append(str(int(
+                        selected_play.time.split(":")[0]) + 1) + " minutes")
             else:
-                list_to_paste.append(str(int(selected_play.time.split(":")[0])))
+            	if int(selected_play.time.split(":")[0]) == 1:
+            		list_to_paste.append(str(int(selected_play.time.split(":")[0])) +
+            			" minute")
+            	else:
+                	list_to_paste.append(str(int(selected_play.time.split(":")[0])) + 
+                		" minutes")
         elif i == "lead_increase_or_decrease":
             if selected_play.team + ".png" in game_object.home_logo:
                 if selected_play.home_score > selected_play.away_score:
