@@ -55,7 +55,7 @@ MADE_SHOT_SENTENCES = [
 
 REBOUND_SENTENCES = [
     ("While perhaps unbeknownst to him at the time ({} to go in the {}), {}'s \
-        successful attempt to secure a failed shot from {} was game_altering.  ",
+        successful attempt to secure a failed shot from {} was game altering.  ",
         ["minutes", "quarter", "player", "shooter"]),
     ("After an ill-fated shot attempt from {}, {} secured the rebound for the \
         {} and the additional momentum that went with it.  ",
