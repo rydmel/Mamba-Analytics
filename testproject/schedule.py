@@ -134,27 +134,30 @@ def get_team_schedule(team_name, season, season_type):
     schedule_table = schedule_soup.find("tbody")
 
     results = []
-    for row in schedule_table.find_all("tr"):
-        if (int(row["data-idx"]) > 0 and season_type_code != "3") \
-        or int(row["data-idx"]) > 1:
-            if len(row.find_all("td")) > 1:
-                if row.find_all("td")[1].find("span").text == "Opponent" \
-                and season[-4:] == str(datetime.datetime.now().year):
-                    break
-                else:
-                    if row.find_all("td")[0].find("span").text != "Date":
-                        for cell_number, cell in enumerate(row.find_all(
-                            "td")[0:3]):
-                            if cell_number == 0:
-                                date = cell.find("span").text
-                            elif cell_number == 1:
-                                opponent = cell.find("div").find("span", 
-                                    class_ = "tc pr2").find(
-                                    "a")["href"][17:20].strip("/")
-                            else:
-                                game_id = cell.find("span", class_ = "ml4").\
-                                find("a")["href"][-9:]                                    
+    try:
+        for row in schedule_table.find_all("tr"):
+            if (int(row["data-idx"]) > 0 and season_type_code != "3") \
+            or int(row["data-idx"]) > 1:
+                if len(row.find_all("td")) > 1:
+                    if row.find_all("td")[1].find("span").text == "Opponent" \
+                    and season[-4:] == str(datetime.datetime.now().year):
+                        break
+                    else:
+                        if row.find_all("td")[0].find("span").text != "Date":
+                            for cell_number, cell in enumerate(row.find_all(
+                                "td")[0:3]):
+                                if cell_number == 0:
+                                    date = cell.find("span").text
+                                elif cell_number == 1:
+                                    opponent = cell.find("div").find("span", 
+                                        class_ = "tc pr2").find(
+                                        "a")["href"][17:20].strip("/")
+                                else:
+                                    game_id = cell.find("span", class_ = "ml4").\
+                                    find("a")["href"][-9:]                                    
 
-                        results.append((date, opponent, game_id))
+                            results.append((date, opponent, game_id))
+    except:
+         print("No schedule")
 
-    return (['Date', 'Opponent', 'Game ID'], results)
+    return (['Date', 'Opponent', 'Game ID'], [("Invalid", "schedule selection", "for selected team")])
